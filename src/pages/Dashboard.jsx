@@ -6,7 +6,7 @@ export default function Dashboard() {
     const [stats, setStats] = useState({
         totalOrders: 0,
         confirmedOrders: 0,
-        cancelledOrders: 0,
+        canceledOrders: 0,
         highRiskOrders: 0,
         lowRiskOrders: 0,
         estimatedRtoSaved: 0,
