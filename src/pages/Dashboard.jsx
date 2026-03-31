@@ -99,6 +99,11 @@ export default function Dashboard() {
                 const { ok: statsOk, data: statsData } = await fetchAPI('/analytics/summary');
                 if (statsOk && statsData.data) setStats(prev => ({ ...prev, ...statsData.data }));
                 await loadHeldOrders();
+
+                // AUTOMATIC TOUR RESUME
+                if (window.tourInstance) {
+                    window.tourInstance.show('orders-table');
+                }
             } else {
                 alert('Failed to create test order: ' + (data.error || 'Unknown error'));
             }

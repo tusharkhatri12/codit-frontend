@@ -20,6 +20,7 @@ export const initTour = (navigate) => {
         defaultStepOptions: {
             classes: 'codit-tour-theme shadow-2xl rounded-2xl border border-slate-200',
             scrollTo: { behavior: 'smooth', block: 'center' },
+            canClickTarget: true,
             cancelIcon: {
                 enabled: true
             },
@@ -52,6 +53,7 @@ export const initTour = (navigate) => {
             element: '#tour-dashboard-header',
             on: 'bottom'
         },
+        canClickTarget: true,
         buttons: [
             {
                 classes: 'shepherd-button-primary',
@@ -77,6 +79,7 @@ export const initTour = (navigate) => {
             element: '#tour-create-test-btn',
             on: 'bottom'
         },
+        canClickTarget: true,
         advanceOn: {
             selector: '#tour-create-test-btn',
             event: 'click'
@@ -90,29 +93,6 @@ export const initTour = (navigate) => {
         ]
     });
 
-    // Step 2.5: Simulation Modal (NON-BLOCKING)
-    tour.addStep({
-        id: 'test-modal',
-        text: 'Fill the form and click "Inject Test Order". Try ₹5000+ to see fraud detection.',
-        attachTo: {
-            element: '#tour-inject-btn',
-            on: 'top'
-        },
-        canClickTarget: true,
-        buttons: [
-            {
-                text: 'Back',
-                action: function () {
-                    return this.back();
-                }
-            }
-        ],
-        advanceOn: {
-            selector: '#tour-inject-btn',
-            event: 'click'
-        }
-    });
-
     // Step 3: Orders Table Overview
     tour.addStep({
         id: 'orders-table',
@@ -121,6 +101,7 @@ export const initTour = (navigate) => {
             element: '#tour-orders-table',
             on: 'top'
         },
+        canClickTarget: true,
         beforeShowPromise: function () {
             return new Promise(async (resolve) => {
                 const currentPath = window.location.pathname;
@@ -142,6 +123,7 @@ export const initTour = (navigate) => {
             element: '#tour-header-score',
             on: 'bottom'
         },
+        canClickTarget: true,
         buttons: tourButtons
     });
 
@@ -153,6 +135,7 @@ export const initTour = (navigate) => {
             element: '#tour-header-action',
             on: 'bottom'
         },
+        canClickTarget: true,
         buttons: tourButtons
     });
 
@@ -164,6 +147,7 @@ export const initTour = (navigate) => {
             element: '#tour-header-whatsapp',
             on: 'bottom'
         },
+        canClickTarget: true,
         buttons: tourButtons
     });
 
@@ -175,6 +159,7 @@ export const initTour = (navigate) => {
             element: '#tour-filter-bar',
             on: 'bottom'
         },
+        canClickTarget: true,
         buttons: tourButtons
     });
 
@@ -186,6 +171,7 @@ export const initTour = (navigate) => {
             element: '.tour-details-btn',
             on: 'left'
         },
+        canClickTarget: true,
         beforeShowPromise: function () {
             return waitForElement('.tour-details-btn');
         },
@@ -200,6 +186,7 @@ export const initTour = (navigate) => {
             element: '#tour-simulate-yes',
             on: 'top'
         },
+        canClickTarget: true,
         beforeShowPromise: function () {
             return new Promise(async (resolve) => {
                 const detailsBtn = document.querySelector('.tour-details-btn');
@@ -219,6 +206,7 @@ export const initTour = (navigate) => {
             element: '#tour-metrics-section',
             on: 'top'
         },
+        canClickTarget: true,
         beforeShowPromise: function () {
             return new Promise(async (resolve) => {
                 const closeBtn = document.querySelector('#tour-close-modal-btn');
@@ -237,5 +225,6 @@ export const initTour = (navigate) => {
         ]
     });
 
+    window.tourInstance = tour;
     return tour;
 };
