@@ -1,0 +1,8 @@
+/* Tailwind handles all styling through CDN in index.html */
+/* Removing default Vite/React styles to allow full-width layout */
+body, #root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
