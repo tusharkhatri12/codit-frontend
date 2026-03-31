@@ -102,7 +102,16 @@ export default function Signup() {
                                 <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider ml-1" htmlFor="password">Password</label>
                             </div>
                             <div className="relative">
-                                <input className="w-full bg-surface-container-high border-none rounded-xl px-4 py-3 text-sm text-on-surface focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-on-surface-variant/40 pr-10" id="password" placeholder="••••••••" required type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                <input 
+                                    className="w-full bg-surface-container-high border-none rounded-xl px-4 py-3 text-sm text-on-surface focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-on-surface-variant/40 pr-10" 
+                                    id="password" 
+                                    placeholder="••••••••" 
+                                    autoComplete="new-password"
+                                    required 
+                                    type="password" 
+                                    value={password} 
+                                    onChange={(e) => setPassword(e.target.value)} 
+                                />
                                 <button className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors" type="button">
                                     <span className="material-symbols-outlined text-[18px]">visibility_off</span>
                                 </button>

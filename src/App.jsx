@@ -22,7 +22,6 @@ function App() {
   return (
     <UserProvider>
       <Router>
-        <TourManager />
         <div className="min-h-screen bg-background font-sans text-on-surface selection:bg-primary selection:text-white">
           <Routes>
             <Route path="/" element={<LandingPage />} />

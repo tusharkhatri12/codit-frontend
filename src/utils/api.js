@@ -20,7 +20,9 @@ export const fetchAPI = async (endpoint, options = {}) => {
         ...options.headers,
     };
 
-    if (token) {
+    const isAuthRoute = endpoint.includes('/auth/login') || endpoint.includes('/auth/signup');
+    
+    if (token && !isAuthRoute) {
         headers['Authorization'] = `Bearer ${token}`;
     }
 

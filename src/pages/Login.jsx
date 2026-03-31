@@ -101,6 +101,7 @@ export default function Login() {
                                     className="w-full bg-surface-container-high border-none rounded-xl px-4 py-3 text-sm text-on-surface focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-on-surface-variant/40 pr-10" 
                                     id="password" 
                                     placeholder="••••••••" 
+                                    autoComplete="current-password"
                                     required 
                                     type="password" 
                                     value={password}

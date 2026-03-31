@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, Outlet, useLocation, Link, useNavigate } from 'react-router-dom';
 import { fetchAPI } from '../utils/api';
 import { useUser } from '../context/UserContext';
+import TourManager from '../tour/TourManager';
 
 export default function DashboardLayout() {
     const { user, switchMode, logout, loading: userLoading } = useUser();
@@ -77,6 +78,7 @@ export default function DashboardLayout() {
 
     return (
         <div className="flex bg-slate-50 text-slate-900 h-full min-h-screen overflow-hidden font-body antialiased">
+            <TourManager />
             
             {/* Mobile Sidebar Overlay */}
             {sidebarOpen && (
