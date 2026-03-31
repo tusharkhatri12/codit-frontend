@@ -39,7 +39,15 @@ export const initTour = (navigate) => {
             {
                 classes: 'shepherd-button-primary',
                 text: 'Show Me How',
-                type: 'next'
+                action: function() {
+                    const hasTestBtn = document.querySelector('#tour-create-test-btn');
+                    if (hasTestBtn) {
+                        return this.next();
+                    } else {
+                        // Skip directly to orders if no test button (Live mode)
+                        return this.show('orders-table');
+                    }
+                }
             }
         ]
     });
@@ -51,18 +59,6 @@ export const initTour = (navigate) => {
         attachTo: {
             element: '#tour-create-test-btn',
             on: 'bottom'
-        },
-        beforeShowPromise: function() {
-            return new Promise((resolve) => {
-                const target = document.querySelector('#tour-create-test-btn');
-                if (!target) {
-                    // If element not found (e.g. in Live mode), skip to next step
-                    this.next();
-                    resolve();
-                } else {
-                    resolve();
-                }
-            });
         }
     });
 
