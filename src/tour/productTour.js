@@ -96,10 +96,10 @@ export const initTour = (navigate) => {
         text: 'Go ahead and fill in some test details (try a high amount like ₹10,000!) and then click "Inject Test Order".',
         attachTo: {
             element: '#tour-simulation-form',
-            on: 'left'
+            on: 'right' // Move to right to avoid overlapping the inputs
         },
-        canClickTarget: true, // Crucial: Allows typing in the form
-        highlightClass: 'tour-highlight-form', // We can use this to style if needed
+        modalOverlayOpeningActive: false, // NUCLEAR FIX: Disable the blocking overlay for this step
+        canClickTarget: true,
         advanceOn: {
             selector: '#tour-inject-btn',
             event: 'click'
