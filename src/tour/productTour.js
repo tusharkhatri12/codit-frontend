@@ -103,53 +103,55 @@ export const initTour = (navigate) => {
     tour.addStep({
         id: 'whatsapp-section',
         text: 'CODIT automatically sends WhatsApp confirmation messages to your customers.',
+        text: 'Our AI analyzes each order. Click "Details" to see why this order was flagged.',
         attachTo: {
-            element: '#tour-whatsapp-section',
-            on: 'bottom'
+            element: '.tour-details-btn',
+            on: 'left'
         },
-        beforeShowPromise: function () {
-            return new Promise((resolve) => {
-                // If there are orders, trigger the first one's detail to show the modal
-                // For the tour, we expect at least one test order or demo order
-                const detailBtn = document.querySelector('.tour-details-btn');
-                if (detailBtn) {
-                    detailBtn.click();
-                    setTimeout(resolve, 600); // Wait for modal animation
-                } else {
-                    console.warn('Tour: Details button not found');
-                    resolve();
-                }
-            });
+        beforeShowPromise: function() {
+            return waitForElement('.tour-details-btn');
         }
     });
 
-    // Step 5: Simulate YES
+    // Step 5: Simulate YES (Modal interaction)
     tour.addStep({
         id: 'simulate-yes',
-        text: 'Click <b>CONFIRM (YES)</b> to simulate a real customer confirming their order.',
+        text: 'This simulates a customer confirming their order via WhatsApp. Our AI uses this feedback to refine its risk model.',
         attachTo: {
             element: '#tour-simulate-yes',
             on: 'top'
         },
-        advanceOn: { selector: '#tour-simulate-yes', event: 'click' }
+        beforeShowPromise: function() {
+            return new Promise(async (resolve) => {
+                const detailsBtn = document.querySelector('.tour-details-btn');
+                if (detailsBtn) detailsBtn.click();
+                await waitForElement('#tour-simulate-yes');
+                resolve();
+            });
+        }
     });
 
-    // Step 6: Held Orders (Nav back to Dashboard)
+    // Step 6: Held Orders (Close Modal and Return)
     tour.addStep({
         id: 'held-orders',
-        text: 'High-risk or unconfirmed orders are automatically held to prevent RTO losses.',
+        text: 'High-risk orders are automatically held here to prevent RTO losses until they are verified.',
         attachTo: {
             element: '#tour-held-orders',
-            on: 'left'
+            on: 'bottom'
         },
-        beforeShowPromise: function () {
-            return new Promise((resolve) => {
-                // Close modal first using the new specific ID
+        beforeShowPromise: function() {
+            return new Promise(async (resolve) => {
                 const closeBtn = document.querySelector('#tour-close-modal-btn');
                 if (closeBtn) closeBtn.click();
-
-                navigate('/dashboard');
-                setTimeout(resolve, 500);
+                
+                // Return to dashboard if we are on orders page
+                const currentPath = window.location.pathname;
+                if (currentPath !== '/dashboard') {
+                    navigate('/dashboard');
+                }
+                
+                await waitForElement('#tour-held-orders');
+                resolve();
             });
         }
     });
