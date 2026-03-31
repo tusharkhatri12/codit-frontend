@@ -38,8 +38,8 @@ export const initTour = (navigate) => {
         buttons: [
             {
                 classes: 'shepherd-button-primary',
-                text: 'Show Me How',
-                action: function() {
+                text: 'Product Tour',
+                action: function () {
                     const hasTestBtn = document.querySelector('#tour-create-test-btn');
                     if (hasTestBtn) {
                         return this.next();
@@ -62,6 +62,23 @@ export const initTour = (navigate) => {
         }
     });
 
+    // Helper to wait for elements (Handles route changes)
+    const waitForElement = (selector, maxAttempts = 10) => {
+        return new Promise((resolve) => {
+            let attempts = 0;
+            const check = () => {
+                const el = document.querySelector(selector);
+                if (el) return resolve(el);
+                if (attempts++ < maxAttempts) {
+                    setTimeout(check, 300);
+                } else {
+                    resolve(null); // Continue anyway after timeout
+                }
+            };
+            check();
+        });
+    };
+
     // Step 3: Orders Table (Navigate to Orders)
     tour.addStep({
         id: 'orders-table',
@@ -71,10 +88,13 @@ export const initTour = (navigate) => {
             on: 'top'
         },
         beforeShowPromise: function() {
-            return new Promise((resolve) => {
-                navigate('/dashboard/orders');
-                // Give some time for the page to load
-                setTimeout(resolve, 500);
+            return new Promise(async (resolve) => {
+                const currentPath = window.location.pathname;
+                if (currentPath !== '/dashboard/orders') {
+                    navigate('/dashboard/orders');
+                }
+                await waitForElement('#tour-orders-table');
+                resolve();
             });
         }
     });
@@ -87,17 +107,17 @@ export const initTour = (navigate) => {
             element: '#tour-whatsapp-section',
             on: 'bottom'
         },
-        beforeShowPromise: function() {
+        beforeShowPromise: function () {
             return new Promise((resolve) => {
                 // If there are orders, trigger the first one's detail to show the modal
                 // For the tour, we expect at least one test order or demo order
                 const detailBtn = document.querySelector('.tour-details-btn');
                 if (detailBtn) {
-                  detailBtn.click();
-                  setTimeout(resolve, 600); // Wait for modal animation
+                    detailBtn.click();
+                    setTimeout(resolve, 600); // Wait for modal animation
                 } else {
-                  console.warn('Tour: Details button not found');
-                  resolve();
+                    console.warn('Tour: Details button not found');
+                    resolve();
                 }
             });
         }
@@ -122,12 +142,12 @@ export const initTour = (navigate) => {
             element: '#tour-held-orders',
             on: 'left'
         },
-        beforeShowPromise: function() {
+        beforeShowPromise: function () {
             return new Promise((resolve) => {
                 // Close modal first using the new specific ID
                 const closeBtn = document.querySelector('#tour-close-modal-btn');
                 if (closeBtn) closeBtn.click();
-                
+
                 navigate('/dashboard');
                 setTimeout(resolve, 500);
             });
