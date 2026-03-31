@@ -24,7 +24,8 @@ export const fetchAPI = async (endpoint, options = {}) => {
         headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${API_URL}${endpoint}`, {
+    const baseUrl = API_URL.endsWith('/api') ? API_URL : `${API_URL}/api`;
+    const response = await fetch(`${baseUrl}${endpoint}`, {
         ...options,
         headers,
     });
