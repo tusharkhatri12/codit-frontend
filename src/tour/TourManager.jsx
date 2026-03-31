@@ -25,14 +25,14 @@ export default function TourManager() {
             }
         };
 
-        window.addEventListener('start-tour', handleStartTour);
+        window.addEventListener('start-product-tour', handleStartTour);
 
         // Auto-trigger for new users
         const hasSeenTour = localStorage.getItem('codit_tour_seen');
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const token = localStorage.getItem('token');
         
         // Only auto-trigger if logged in, hasn't seen tour, and on dashboard
-        if (!hasSeenTour && user.token && (location.pathname === '/dashboard' || location.pathname === '/dashboard/')) {
+        if (!hasSeenTour && token && (location.pathname === '/dashboard' || location.pathname === '/dashboard/')) {
             setTimeout(() => {
                 tourRef.current.start();
                 localStorage.setItem('codit_tour_seen', 'true');
@@ -40,7 +40,7 @@ export default function TourManager() {
         }
 
         return () => {
-            window.removeEventListener('start-tour', handleStartTour);
+            window.removeEventListener('start-product-tour', handleStartTour);
         };
     }, [navigate, location]);
 

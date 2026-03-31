@@ -66,7 +66,7 @@ export default function OrderDetailsModal({ order: initialOrder, onClose, loadin
                                 <p style={styles.headerLabel}>ORDER INTELLIGENCE</p>
                                 <h2 style={styles.headerTitle}>#{order.orderId}</h2>
                             </div>
-                            <button onClick={onClose} style={styles.closeBtn}>
+                            <button id="tour-close-modal-btn" onClick={onClose} style={styles.closeBtn}>
                                 <span className="material-symbols-outlined">close</span>
                             </button>
                         </div>

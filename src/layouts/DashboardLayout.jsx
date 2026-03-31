@@ -191,11 +191,11 @@ export default function DashboardLayout() {
 
                             <button 
                                 id="tour-start-tour"
-                                onClick={() => window.dispatchEvent(new CustomEvent('start-tour'))}
+                                onClick={() => window.dispatchEvent(new CustomEvent('start-product-tour'))}
                                 className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-[10px] font-black uppercase tracking-widest hover:bg-indigo-100 transition-all active:scale-95"
                             >
                                 <span className="material-symbols-outlined text-[14px]">explore</span>
-                                Start Tour
+                                Show me how
                             </button>
 
                             <button className="p-2 text-slate-500 hover:bg-slate-50 hover:text-indigo-600 transition-colors rounded-full relative active:scale-95">

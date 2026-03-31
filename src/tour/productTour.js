@@ -51,6 +51,18 @@ export const initTour = (navigate) => {
         attachTo: {
             element: '#tour-create-test-btn',
             on: 'bottom'
+        },
+        beforeShowPromise: function() {
+            return new Promise((resolve) => {
+                const target = document.querySelector('#tour-create-test-btn');
+                if (!target) {
+                    // If element not found (e.g. in Live mode), skip to next step
+                    this.next();
+                    resolve();
+                } else {
+                    resolve();
+                }
+            });
         }
     });
 
@@ -116,8 +128,8 @@ export const initTour = (navigate) => {
         },
         beforeShowPromise: function() {
             return new Promise((resolve) => {
-                // Close modal first
-                const closeBtn = document.querySelector('button[onClick*="onClose"]');
+                // Close modal first using the new specific ID
+                const closeBtn = document.querySelector('#tour-close-modal-btn');
                 if (closeBtn) closeBtn.click();
                 
                 navigate('/dashboard');
