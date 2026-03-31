@@ -288,7 +288,7 @@ export default function Dashboard() {
 
             {isTestModalOpen && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
-                    <div className="bg-white rounded-[24px] w-full max-w-md overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+                    <div id="tour-simulation-form" className="bg-white rounded-[24px] w-full max-w-md overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
                         <div className="p-6 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
                             <h2 className="text-xl font-black text-slate-900 uppercase">Create Test Order</h2>
                             <button onClick={() => setIsTestModalOpen(false)} className="text-slate-400 hover:text-slate-600"><span className="material-symbols-outlined">close</span></button>

@@ -95,10 +95,11 @@ export const initTour = (navigate) => {
         id: 'test-modal',
         text: 'Go ahead and fill in some test details (try a high amount like ₹10,000!) and then click "Inject Test Order".',
         attachTo: {
-            element: '#tour-inject-btn',
-            on: 'bottom'
+            element: '#tour-simulation-form',
+            on: 'left'
         },
-        canClickTarget: true, // Allow user to type in the form
+        canClickTarget: true, // Crucial: Allows typing in the form
+        highlightClass: 'tour-highlight-form', // We can use this to style if needed
         advanceOn: {
             selector: '#tour-inject-btn',
             event: 'click'
