@@ -318,7 +318,7 @@ export default function Dashboard() {
                                     <input type="text" required value={testOrderData.billingCity} onChange={(e) => setTestOrderData({...testOrderData, billingCity: e.target.value})} className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-amber-500 outline-none" />
                                 </div>
                             </div>
-                            <button type="submit" disabled={actionLoading === 'create-test'} className="w-full py-3 bg-slate-900 hover:bg-black text-white rounded-xl font-bold uppercase text-xs transition-all shadow-lg active:scale-95 disabled:opacity-50">
+                            <button id="tour-inject-btn" type="submit" disabled={actionLoading === 'create-test'} className="w-full py-3 bg-slate-900 hover:bg-black text-white rounded-xl font-bold uppercase text-xs transition-all shadow-lg active:scale-95 disabled:opacity-50">
                                 {actionLoading === 'create-test' ? 'Injecting...' : 'Inject Test Order'}
                             </button>
                         </form>

@@ -237,7 +237,7 @@ export default function Orders() {
 
             {/* Filter Bar */}
             <div className="flex flex-col md:flex-row flex-wrap items-start md:items-center justify-between gap-4 mb-8">
-                <div className="flex items-center bg-slate-50 p-1 rounded-xl w-full md:w-auto overflow-x-auto">
+                <div id="tour-filter-bar" className="flex items-center bg-slate-50 p-1 rounded-xl w-full md:w-auto overflow-x-auto">
                     <button onClick={() => { setActiveTab('all'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'all' ? 'bg-white shadow-sm text-primary' : 'text-slate-500 hover:text-slate-900'}`}>All Orders</button>
                     <button onClick={() => { setActiveTab('flagged'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'flagged' ? 'bg-white shadow-sm text-error' : 'text-slate-500 hover:text-slate-900'}`}>Flagged</button>
                     <button onClick={() => { setActiveTab('verified'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'verified' ? 'bg-white shadow-sm text-emerald-600' : 'text-slate-500 hover:text-slate-900'}`}>Verified</button>
@@ -279,10 +279,10 @@ export default function Orders() {
                                 <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">Customer</th>
                                 <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">Amount</th>
                                 <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">Contact</th>
-                                <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">AI Risk Score</th>
+                                <th id="tour-header-score" className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">AI Risk Score</th>
                                 <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">Risk Status</th>
-                                <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">Action Taken</th>
-                                <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">WhatsApp</th>
+                                <th id="tour-header-action" className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">Action Taken</th>
+                                <th id="tour-header-whatsapp" className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">WhatsApp</th>
                                 <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500 text-right">Actions</th>
                             </tr>
                         </thead>
