@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:5000/api';
+export const API_URL = import.meta.env.VITE_API_URL || 'https://codit-backend.onrender.com/api';
+export const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://codit-backend.onrender.com';
 
 export const getAuthToken = () => localStorage.getItem('token');
 

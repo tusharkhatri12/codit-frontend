@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { fetchAPI } from '../utils/api';
+import { fetchAPI, API_URL } from '../utils/api';
 import { useRealtime } from '../hooks/useRealtime';
 import OrderDetailsModal from '../components/OrderDetailsModal';
 
@@ -96,7 +96,7 @@ export default function Orders() {
         try {
             const qs = buildQueryStrings();
             const token = localStorage.getItem('token');
-            const res = await fetch(`http://localhost:5000/api/orders/export?${qs}`, {
+            const res = await fetch(`${API_URL}/orders/export?${qs}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const blob = await res.blob();

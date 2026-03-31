@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { io } from 'socket.io-client';
-
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+import { BACKEND_URL } from '../utils/api';
 
 let socketInstance = null;
 
