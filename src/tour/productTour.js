@@ -90,15 +90,12 @@ export const initTour = (navigate) => {
         ]
     });
 
-    // Step 2.5: Simulation Modal (INTERACTIVE FORM)
+    // Step 2.5: Simulation Modal (NON-BLOCKING)
     tour.addStep({
         id: 'test-modal',
-        text: 'Go ahead and fill in some test details (try a high amount like ₹10,000!) and then click "Inject Test Order".',
-        attachTo: {
-            element: '#tour-simulation-form',
-            on: 'right' // Move to right to avoid overlapping the inputs
-        },
-        modalOverlayOpeningActive: false, // NUCLEAR FIX: Disable the blocking overlay for this step
+        text: 'Simulation Mode: Fill in some test details (try a high amount!) and then click "Inject Test Order".',
+        // Floating bubble - no attachTo means it won't overlap the form
+        modalOverlayOpeningActive: false, 
         canClickTarget: true,
         advanceOn: {
             selector: '#tour-inject-btn',
