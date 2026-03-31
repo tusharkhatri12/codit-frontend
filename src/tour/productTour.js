@@ -16,7 +16,7 @@ const tourButtons = [
 
 export const initTour = (navigate) => {
     const tour = new Shepherd.Tour({
-        useModalOverlay: true,
+        useModalOverlay: false,
         defaultStepOptions: {
             classes: 'codit-tour-theme shadow-2xl rounded-2xl border border-slate-200',
             scrollTo: { behavior: 'smooth', block: 'center' },
@@ -56,7 +56,7 @@ export const initTour = (navigate) => {
             {
                 classes: 'shepherd-button-primary',
                 text: 'Product Tour',
-                action: function() {
+                action: function () {
                     const hasTestBtn = document.querySelector('#tour-create-test-btn');
                     if (hasTestBtn) {
                         return this.next();
@@ -85,7 +85,7 @@ export const initTour = (navigate) => {
             {
                 classes: 'shepherd-button-secondary',
                 text: 'Exit',
-                action: function() { return this.cancel(); }
+                action: function () { return this.cancel(); }
             }
         ]
     });
@@ -93,21 +93,24 @@ export const initTour = (navigate) => {
     // Step 2.5: Simulation Modal (NON-BLOCKING)
     tour.addStep({
         id: 'test-modal',
-        text: 'Simulation Mode: Fill in some test details (try a high amount!) and then click "Inject Test Order".',
-        // Floating bubble - no attachTo means it won't overlap the form
-        modalOverlayOpeningActive: false, 
+        text: 'Fill the form and click "Inject Test Order". Try ₹5000+ to see fraud detection.',
+        attachTo: {
+            element: '#tour-inject-btn',
+            on: 'top'
+        },
         canClickTarget: true,
+        buttons: [
+            {
+                text: 'Back',
+                action: function () {
+                    return this.back();
+                }
+            }
+        ],
         advanceOn: {
             selector: '#tour-inject-btn',
             event: 'click'
-        },
-        buttons: [
-            {
-                classes: 'shepherd-button-secondary',
-                text: 'Back',
-                action: function() { return this.back(); }
-            }
-        ]
+        }
     });
 
     // Step 3: Orders Table Overview
@@ -118,7 +121,7 @@ export const initTour = (navigate) => {
             element: '#tour-orders-table',
             on: 'top'
         },
-        beforeShowPromise: function() {
+        beforeShowPromise: function () {
             return new Promise(async (resolve) => {
                 const currentPath = window.location.pathname;
                 if (currentPath !== '/dashboard/orders') {
@@ -183,7 +186,7 @@ export const initTour = (navigate) => {
             element: '.tour-details-btn',
             on: 'left'
         },
-        beforeShowPromise: function() {
+        beforeShowPromise: function () {
             return waitForElement('.tour-details-btn');
         },
         buttons: tourButtons
@@ -197,7 +200,7 @@ export const initTour = (navigate) => {
             element: '#tour-simulate-yes',
             on: 'top'
         },
-        beforeShowPromise: function() {
+        beforeShowPromise: function () {
             return new Promise(async (resolve) => {
                 const detailsBtn = document.querySelector('.tour-details-btn');
                 if (detailsBtn) detailsBtn.click();
@@ -216,7 +219,7 @@ export const initTour = (navigate) => {
             element: '#tour-metrics-section',
             on: 'top'
         },
-        beforeShowPromise: function() {
+        beforeShowPromise: function () {
             return new Promise(async (resolve) => {
                 const closeBtn = document.querySelector('#tour-close-modal-btn');
                 if (closeBtn) closeBtn.click();
@@ -229,7 +232,7 @@ export const initTour = (navigate) => {
             {
                 classes: 'shepherd-button-primary',
                 text: 'Finish Tour',
-                action: function() { return this.complete(); }
+                action: function () { return this.complete(); }
             }
         ]
     });
