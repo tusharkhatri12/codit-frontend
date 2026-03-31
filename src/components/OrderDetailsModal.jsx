@@ -83,13 +83,13 @@ export default function OrderDetailsModal({ order: initialOrder, onClose, loadin
                                     <span style={{
                                         ...styles.badge,
                                         background: 
-                                            order.orderStatus === 'cancelled' ? '#fee2e2' : 
+                                            order.orderStatus === 'canceled' ? '#fee2e2' : 
                                             order.orderStatus === 'confirmed' ? '#dcfce7' : 
                                             order.orderStatus === 'pending_review' ? '#fef3c7' :
                                             order.orderStatus === 'held' ? '#ffedd5' :
                                             '#f1f5f9',
                                         color: 
-                                            order.orderStatus === 'cancelled' ? '#b91c1c' : 
+                                            order.orderStatus === 'canceled' ? '#b91c1c' : 
                                             order.orderStatus === 'confirmed' ? '#15803d' : 
                                             order.orderStatus === 'pending_review' ? '#b45309' :
                                             order.orderStatus === 'held' ? '#c2410c' :
@@ -163,8 +163,8 @@ export default function OrderDetailsModal({ order: initialOrder, onClose, loadin
                                     <p style={{ fontSize: 10, fontWeight: 700, color: '#4ade80', textTransform: 'uppercase', letterSpacing: 1 }}>Confirmed</p>
                                 </div>
                                 <div style={{ ...styles.statBox, background: '#fef2f2', border: '1px solid #fecaca' }}>
-                                    <p style={{ fontSize: 24, fontWeight: 900, color: '#b91c1c' }}>{order.customerStats?.cancelledOrders || 0}</p>
-                                    <p style={{ fontSize: 10, fontWeight: 700, color: '#f87171', textTransform: 'uppercase', letterSpacing: 1 }}>Cancelled</p>
+                                    <p style={{ fontSize: 24, fontWeight: 900, color: '#b91c1c' }}>{order.customerStats?.canceledOrders || 0}</p>
+                                    <p style={{ fontSize: 10, fontWeight: 700, color: '#f87171', textTransform: 'uppercase', letterSpacing: 1 }}>Canceled</p>
                                 </div>
                             </div>
                         </div>

@@ -33,7 +33,7 @@ export default function Orders() {
         if (activeTab === 'verified') params.append('orderStatus', 'confirmed');
         if (activeTab === 'pending') params.append('orderStatus', 'pending_review');
         if (activeTab === 'held') params.append('orderStatus', 'held');
-        if (activeTab === 'cancelled') params.append('orderStatus', 'cancelled');
+        if (activeTab === 'canceled') params.append('orderStatus', 'canceled');
         
         if (dateRange === 'last30') {
             const past = new Date();
@@ -148,7 +148,7 @@ export default function Orders() {
                     riskScore: score,
                     riskLevel: mockOrder.riskLevel,
                     riskReasons,
-                    customerStats: { totalOrders: 1, confirmedOrders: mockOrder.orderStatus === 'confirmed' ? 1 : 0, cancelledOrders: mockOrder.orderStatus === 'cancelled' ? 1 : 0 },
+                    customerStats: { totalOrders: 1, confirmedOrders: mockOrder.orderStatus === 'confirmed' ? 1 : 0, canceledOrders: mockOrder.orderStatus === 'canceled' ? 1 : 0 },
                     fraudSignals,
                     recommendation: score > 70 ? 'Cancel' : score > 40 ? 'Review' : 'Safe',
                     finalDecision: mockOrder.finalDecision,
@@ -243,7 +243,7 @@ export default function Orders() {
                     <button onClick={() => { setActiveTab('verified'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'verified' ? 'bg-white shadow-sm text-emerald-600' : 'text-slate-500 hover:text-slate-900'}`}>Verified</button>
                     <button onClick={() => { setActiveTab('pending'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'pending' ? 'bg-white shadow-sm text-amber-600' : 'text-slate-500 hover:text-slate-900'}`}>Review</button>
                     <button onClick={() => { setActiveTab('held'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'held' ? 'bg-white shadow-sm text-orange-600' : 'text-slate-500 hover:text-slate-900'}`}>Held</button>
-                    <button onClick={() => { setActiveTab('cancelled'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'cancelled' ? 'bg-white shadow-sm text-slate-800' : 'text-slate-500 hover:text-slate-900'}`}>Canceled</button>
+                    <button onClick={() => { setActiveTab('canceled'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'canceled' ? 'bg-white shadow-sm text-slate-800' : 'text-slate-500 hover:text-slate-900'}`}>Canceled</button>
                 </div>
                 
                 <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
