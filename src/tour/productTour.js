@@ -63,7 +63,7 @@ export const initTour = (navigate) => {
     });
 
     // Helper to wait for elements (Handles route changes)
-    const waitForElement = (selector, maxAttempts = 10) => {
+    const waitForElement = (selector, maxAttempts = 15) => {
         return new Promise((resolve) => {
             let attempts = 0;
             const check = () => {
@@ -99,10 +99,9 @@ export const initTour = (navigate) => {
         }
     });
 
-    // Step 4: WhatsApp Section (Assuming user clicks' Details' or we show it generally)
+    // Step 4: WhatsApp Confirmation (Click Details)
     tour.addStep({
         id: 'whatsapp-section',
-        text: 'CODIT automatically sends WhatsApp confirmation messages to your customers.',
         text: 'Our AI analyzes each order. Click "Details" to see why this order was flagged.',
         attachTo: {
             element: '.tour-details-btn',
