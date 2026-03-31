@@ -90,31 +90,24 @@ export const initTour = (navigate) => {
         ]
     });
 
-    // Step 2.5: Simulation Modal
+    // Step 2.5: Simulation Modal (INTERACTIVE FORM)
     tour.addStep({
         id: 'test-modal',
-        text: 'This form simulates a real checkout. Click "Inject Test Order" to trigger our AI risk engine.',
+        text: 'Go ahead and fill in some test details (try a high amount like ₹10,000!) and then click "Inject Test Order".',
         attachTo: {
             element: '#tour-inject-btn',
             on: 'bottom'
         },
+        canClickTarget: true, // Allow user to type in the form
+        advanceOn: {
+            selector: '#tour-inject-btn',
+            event: 'click'
+        },
         buttons: [
             {
-                classes: 'shepherd-button-primary',
-                text: 'Inject & See Result',
-                action: async function() {
-                    // The button click in Dashboard.jsx handles the submission.
-                    const injectBtn = document.querySelector('#tour-inject-btn');
-                    if (injectBtn) injectBtn.click();
-
-                    // Short delay for the backend to process, then navigate
-                    setTimeout(() => navigate('/dashboard/orders'), 800);
-                    
-                    const el = await waitForElement('#tour-orders-table');
-                    if (el) {
-                        this.show('orders-table');
-                    }
-                }
+                classes: 'shepherd-button-secondary',
+                text: 'Back',
+                action: function() { return this.back(); }
             }
         ]
     });
@@ -126,6 +119,16 @@ export const initTour = (navigate) => {
         attachTo: {
             element: '#tour-orders-table',
             on: 'top'
+        },
+        beforeShowPromise: function() {
+            return new Promise(async (resolve) => {
+                const currentPath = window.location.pathname;
+                if (currentPath !== '/dashboard/orders') {
+                    navigate('/dashboard/orders');
+                }
+                await waitForElement('#tour-orders-table');
+                resolve();
+            });
         },
         buttons: tourButtons
     });
