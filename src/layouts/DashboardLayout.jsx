@@ -127,7 +127,7 @@ export default function DashboardLayout() {
                             <span className="material-symbols-outlined">dashboard</span>
                             <span>Dashboard</span>
                         </NavLink>
-                        <NavLink to="/dashboard/orders" className={navLinkClass} onClick={() => setSidebarOpen(false)}>
+                        <NavLink id="tour-nav-orders" to="/dashboard/orders" className={navLinkClass} onClick={() => setSidebarOpen(false)}>
                             <span className="material-symbols-outlined">shopping_cart</span>
                             <span>Orders</span>
                         </NavLink>
@@ -188,6 +188,15 @@ export default function DashboardLayout() {
                                 <span className={`w-1.5 h-1.5 rounded-full ${user?.mode === 'live' ? 'bg-indigo-500 animate-pulse' : 'bg-slate-400'}`}></span>
                                 {user?.mode === 'live' ? 'Live' : 'Demo'}
                             </div>
+
+                            <button 
+                                id="tour-start-tour"
+                                onClick={() => window.dispatchEvent(new CustomEvent('start-tour'))}
+                                className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-[10px] font-black uppercase tracking-widest hover:bg-indigo-100 transition-all active:scale-95"
+                            >
+                                <span className="material-symbols-outlined text-[14px]">explore</span>
+                                Start Tour
+                            </button>
 
                             <button className="p-2 text-slate-500 hover:bg-slate-50 hover:text-indigo-600 transition-colors rounded-full relative active:scale-95">
                                 <span className="material-symbols-outlined">notifications</span>

@@ -189,7 +189,7 @@ export default function OrderDetailsModal({ order: initialOrder, onClose, loadin
                         )}
 
                         {/* WhatsApp Simulation Lifecycle */}
-                        <div style={{ ...styles.section, borderBottom: '1px solid #f1f5f9', background: '#f0f9ff' }}>
+                        <div id="tour-whatsapp-section" style={{ ...styles.section, borderBottom: '1px solid #f1f5f9', background: '#f0f9ff' }}>
                             <div style={styles.sectionHeader}>
                                 <span className="material-symbols-outlined" style={{ color: '#0ea5e9', fontSize: 20 }}>chat_bubble</span>
                                 <h3 style={styles.sectionTitle}>WhatsApp Lifecycle (SIMULATION)</h3>
@@ -208,6 +208,7 @@ export default function OrderDetailsModal({ order: initialOrder, onClose, loadin
                             {order.whatsappStatus === 'sent' ? (
                                 <div style={{ display: 'flex', gap: 10 }}>
                                     <button 
+                                        id="tour-simulate-yes"
                                         onClick={() => handleSimulateReply('YES')}
                                         disabled={simulating}
                                         style={{ ...styles.simulateBtn, background: '#10b981' }}

@@ -156,7 +156,7 @@ export default function Dashboard() {
                             <p className="text-xs text-amber-700">Simulate orders to test the risk engine.</p>
                         </div>
                     </div>
-                    <button onClick={() => setIsTestModalOpen(true)} className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl shadow-md transition-all">Create Test Order</button>
+                    <button id="tour-create-test-btn" onClick={() => setIsTestModalOpen(true)} className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl shadow-md transition-all">Create Test Order</button>
                 </div>
             )}
 
@@ -170,12 +170,12 @@ export default function Dashboard() {
                 </div>
             )}
 
-            <section className="flex flex-col gap-2">
+            <section id="tour-dashboard-header" className="flex flex-col gap-2">
                 <h1 className="text-3xl font-black text-slate-900 uppercase">CODIT Insights</h1>
                 <p className="text-slate-500 text-sm font-medium">Real-time fraud detection and order management.</p>
             </section>
             
-            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+            <section id="tour-metrics-section" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
                 <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                     <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">Total Orders</p>
                     <h2 className="text-3xl font-black text-slate-900">{stats.totalOrders.toLocaleString()}</h2>
@@ -196,7 +196,7 @@ export default function Dashboard() {
 
             <div className="flex flex-col lg:grid lg:grid-cols-3 gap-8 w-full">
                 <div className="lg:col-span-2 space-y-8">
-                    <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                    <div id="tour-recent-activity" className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
                         <div className="p-6 border-b border-slate-200 flex items-center justify-between">
                             <h3 className="font-bold text-slate-900">Recent Activity</h3>
                         </div>
@@ -241,7 +241,7 @@ export default function Dashboard() {
                 </div>
 
                 <div className="space-y-8">
-                    <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm h-full">
+                    <div id="tour-held-orders" className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm h-full">
                         <div className="flex items-center justify-between mb-6">
                             <h3 className="font-bold text-slate-900">Held Orders</h3>
                             <span className="bg-rose-500 text-white text-[10px] font-black px-2 py-0.5 rounded-md">{heldOrders.length}</span>

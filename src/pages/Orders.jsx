@@ -270,7 +270,7 @@ export default function Orders() {
             </div>
 
             {/* Orders Table Section */}
-            <section className="bg-white rounded-[24px] shadow-[0px_4px_24px_rgba(44,47,49,0.04)] border border-slate-200/50 overflow-hidden w-full">
+            <section id="tour-orders-table" className="bg-white rounded-[24px] shadow-[0px_4px_24px_rgba(44,47,49,0.04)] border border-slate-200/50 overflow-hidden w-full">
                 <div className="overflow-x-auto w-full">
                     <table className="w-full text-left border-collapse whitespace-nowrap">
                         <thead className="bg-slate-50/50">
@@ -402,7 +402,7 @@ export default function Orders() {
                                                             </button>
                                                         </>
                                                     ) : (
-                                                        <button onClick={() => viewOrderDetails(order._id)} className="px-4 py-1.5 bg-slate-200 text-slate-900 text-[10px] font-black rounded-lg hover:bg-slate-300 transition-all uppercase tracking-widest shadow-sm">
+                                                        <button onClick={() => viewOrderDetails(order._id)} className="tour-details-btn px-4 py-1.5 bg-slate-200 text-slate-900 text-[10px] font-black rounded-lg hover:bg-slate-300 transition-all uppercase tracking-widest shadow-sm">
                                                             Details
                                                         </button>
                                                     )}

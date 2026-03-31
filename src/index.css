@@ -6,3 +6,68 @@ body, #root {
   margin: 0;
   padding: 0;
 }
+
+/* Shepherd Tour Premium Theme */
+.codit-tour-theme {
+    background: #ffffff !important;
+    color: #1e293b !important;
+    border: 1px solid rgba(99, 102, 241, 0.1) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+    border-radius: 24px !important;
+    padding: 12px !important;
+    max-width: 320px !important;
+}
+
+.shepherd-header {
+    background: #f8fafc !important;
+    padding: 16px 20px !important;
+    border-bottom: 1px solid #f1f5f9 !important;
+    border-radius: 20px 20px 0 0 !important;
+}
+
+.shepherd-text {
+    padding: 20px !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    font-weight: 500 !important;
+    color: #475569 !important;
+}
+
+.shepherd-button {
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+    border-radius: 12px !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+    padding: 10px 20px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    transition: all 0.2s !important;
+    border: none !important;
+}
+
+.shepherd-button:hover {
+    background: #e2e8f0 !important;
+}
+
+.shepherd-button-primary {
+    background: #6366f1 !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2) !important;
+}
+
+.shepherd-button-primary:hover {
+    background: #4f46e5 !important;
+    transform: translateY(-1px) !important;
+}
+
+.shepherd-footer {
+    padding: 12px 20px 20px !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+}
+
+.shepherd-arrow::before {
+    background: #ffffff !important;
+}
