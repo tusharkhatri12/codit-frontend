@@ -29,7 +29,7 @@ export default function Onboarding() {
                     // Keep same token, just update user explicitly
                     setToken(getAuthToken(), user);
                 }
-                
+
                 // Route towards dashboard seamlessly!
                 navigate('/dashboard');
             } else {
@@ -52,13 +52,13 @@ export default function Onboarding() {
             {error && <div className="error-banner">{error}</div>}
 
             <div className="plans-grid">
-                
+
                 {/* Starter Plan */}
                 <div className="plan-card">
                     <h2 className="plan-name">Starter Plan</h2>
-                    <div className="plan-price">$49<span>/mo</span></div>
+                    <div className="plan-price">INR 499<span>/mo</span></div>
                     <p className="plan-description">Essential fraud engine bounds perfect for growing DTC brands optimizing basics natively.</p>
-                    
+
                     <ul className="features-list">
                         <li className="feature-item">
                             <span className="feature-icon">check_circle</span>
@@ -74,8 +74,8 @@ export default function Onboarding() {
                         </li>
                     </ul>
 
-                    <button 
-                        className="select-btn select-btn-starter" 
+                    <button
+                        className="select-btn select-btn-starter"
                         onClick={() => handleSelectPlan('starter')}
                         disabled={loading}
                     >
@@ -87,9 +87,9 @@ export default function Onboarding() {
                 <div className="plan-card growth-plan">
                     <div className="popular-badge">Most Popular</div>
                     <h2 className="plan-name">Growth Plan</h2>
-                    <div className="plan-price">$199<span>/mo</span></div>
+                    <div className="plan-price">INR 999<span>/mo</span></div>
                     <p className="plan-description">Advanced autonomous capabilities enabling exact behavioral metrics mapping securely dynamically.</p>
-                    
+
                     <ul className="features-list">
                         <li className="feature-item">
                             <span className="feature-icon">check_circle</span>
@@ -109,8 +109,8 @@ export default function Onboarding() {
                         </li>
                     </ul>
 
-                    <button 
-                        className="select-btn select-btn-growth" 
+                    <button
+                        className="select-btn select-btn-growth"
                         onClick={() => handleSelectPlan('growth')}
                         disabled={loading}
                     >

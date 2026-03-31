@@ -10,7 +10,7 @@ export default function LandingPage() {
             <nav className="w-full sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-sm dark:shadow-none flex items-center justify-between px-4 md:px-6 py-3">
                 <div className="flex items-center gap-4 md:gap-8">
                     <span className="text-xl md:text-2xl font-black tracking-tighter text-slate-900 dark:text-white">Codit</span>
-                    
+
                     <button className="md:hidden text-slate-500 absolute right-4" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                         <span className="material-symbols-outlined text-2xl">{mobileMenuOpen ? 'close' : 'menu'}</span>
                     </button>
@@ -73,12 +73,12 @@ export default function LandingPage() {
                     <div className="relative max-w-6xl mx-auto w-full px-2 md:px-0 mt-8">
                         <div className="absolute -top-12 -left-12 w-48 md:w-64 h-48 md:h-64 bg-primary/20 md:bg-primary/10 rounded-full blur-2xl md:blur-3xl opacity-50 pointer-events-none"></div>
                         <div className="absolute -bottom-12 -right-12 w-48 md:w-64 h-48 md:h-64 bg-secondary/20 md:bg-secondary/10 rounded-full blur-2xl md:blur-3xl opacity-50 pointer-events-none"></div>
-                        
+
                         <div className="bg-white/80 backdrop-blur-xl border border-white/40 rounded-[1.5rem] md:rounded-[2rem] p-2 md:p-4 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] relative">
                             <div className="bg-surface rounded-xl md:rounded-2xl overflow-hidden border border-outline-variant/10 aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9]">
-                                <img 
-                                    alt="Modern analytics dashboard interface showing risk scores, delivery maps, and transaction volume charts in a clean minimalist style" 
-                                    className="w-full h-full object-cover opacity-95 mix-blend-multiply" 
+                                <img
+                                    alt="Modern analytics dashboard interface showing risk scores, delivery maps, and transaction volume charts in a clean minimalist style"
+                                    className="w-full h-full object-cover opacity-95 mix-blend-multiply"
                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYmlsLmcY3LNrwQDyjSYiCkBCsOaqJ76iXrIUEVOC4m_WPmCbvsX8wUlh8Aytsp1qdggzufb5vdWKWvY4_l077Qg9r99Bbh9LAJ-6xyO82VksTZcV9D0i6pOM2OJ6_zPdGtAMcdLPcSiwo7IZ2_jlSYpr5lvsucOjUbnT5OIVLSWG81XQ6yJrCvRkYaoNZLqJZArtUkaqo6D0Pb2adncvIImLMVcymwtrA29IIwQUR8_gIGQb6g1ll0n7TqkJP3zpsgkK62x2zqqY"
                                 />
                             </div>
@@ -147,17 +147,17 @@ export default function LandingPage() {
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div className="lg:w-1/2 w-full mt-8 lg:mt-0">
                             <div className="aspect-square bg-surface-container rounded-[2rem] md:rounded-[3rem] p-4 sm:p-8 flex items-center justify-center overflow-hidden relative border border-outline-variant/10 shadow-inner">
                                 <div className="absolute inset-0 opacity-20 md:opacity-30">
-                                    <img 
-                                        alt="Conceptual visualization of data flowing through a network of glowing lines, symbolizing AI risk detection and verification systems" 
-                                        className="w-full h-full object-cover" 
+                                    <img
+                                        alt="Conceptual visualization of data flowing through a network of glowing lines, symbolizing AI risk detection and verification systems"
+                                        className="w-full h-full object-cover"
                                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOxjT6tlT86T7KycOGj6ktDK-2U0izEx1NWfHbO6wFUBLgW14ay5ikEldJU7SjvEjefJkwHc0CG4tkBKCIpC_Wk4dFUP1apLNhZF8Ay62zbrXK1PFPY8MuZO-3N-2GFMSS_Km15zGTrAAtCjIrz6rxzt7aE4BEIcwqITYb_l8QxTnomEOC2CLeRSaOFCYjhHsr9pq3FRVATE2sqi1GZW7dyGAicKNNyjsGvmQN7a9sIHn4Fe5wseBJo_N6MH4U0KJJzAjL8Xz34b4"
                                     />
                                 </div>
-                                
+
                                 <div className="bg-white/90 backdrop-blur-xl p-6 md:p-8 rounded-[1.5rem] md:rounded-3xl w-full max-w-sm relative z-10 shadow-[0px_8px_32px_rgba(44,47,49,0.1)] border border-white/50 transform rotate-1 hover:rotate-0 transition-transform duration-300">
                                     <div className="flex items-center gap-3 md:gap-4 mb-5 md:mb-6">
                                         <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#E5F9EA] flex items-center justify-center shrink-0 border border-[#25D366]/20 shadow-sm">
@@ -168,12 +168,12 @@ export default function LandingPage() {
                                             <p className="text-[10px] md:text-xs text-slate-500 font-medium mt-0.5">Sent Just Now</p>
                                         </div>
                                     </div>
-                                    
+
                                     <div className="bg-[#E5F9EA] text-[#0A2610] p-3 md:p-4 rounded-xl md:rounded-2xl rounded-tl-sm mb-4 md:mb-5 shadow-sm ml-4">
                                         <p className="text-xs md:text-sm font-medium leading-snug">Hi Rahul! Please confirm your COD order <span className="font-bold text-[#25D366]">#4592</span> by clicking the button below.</p>
                                         <p className="text-[9px] md:text-[10px] text-right text-black/40 mt-1 uppercase tracking-widest font-bold">Codit Automated Agent</p>
                                     </div>
-                                    
+
                                     <button className="w-full py-3 md:py-3.5 bg-[#25D366] text-white rounded-xl font-bold text-sm shadow-md hover:bg-[#20bd5a] hover:shadow-lg active:scale-95 transition-all outline outline-offset-2 outline-transparent focus:outline-[#25D366]/50">
                                         Confirm Order
                                     </button>
@@ -188,7 +188,7 @@ export default function LandingPage() {
             <section className="py-16 md:py-24 px-4 md:px-6 bg-surface w-full overflow-hidden">
                 <div className="max-w-7xl mx-auto w-full">
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight mb-10 md:mb-16 text-center">Engineered for Shopify Stores</h2>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 w-full">
                         {/* Large Feature */}
                         <div className="md:col-span-2 bg-surface-container-lowest p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border border-outline-variant/10 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow group">
@@ -200,9 +200,9 @@ export default function LandingPage() {
                                 <p className="text-sm md:text-base lg:text-lg text-on-surface-variant max-w-md leading-relaxed">Our proprietary algorithm cross-references historical data across thousands of stores to identify <span className="bg-error/10 text-error px-1 rounded italic">"serial returners"</span> before they cost you.</p>
                             </div>
                             <div className="h-40 md:h-48 bg-surface-container rounded-xl md:rounded-2xl relative overflow-hidden border border-outline-variant/5">
-                                <img 
-                                    className="w-full h-full object-cover opacity-30 mix-blend-overlay group-hover:opacity-50 transition-opacity duration-500 group-hover:scale-105" 
-                                    data-alt="Technical data visualization with risk score meters and heat maps indicating geographic fraud concentrations" 
+                                <img
+                                    className="w-full h-full object-cover opacity-30 mix-blend-overlay group-hover:opacity-50 transition-opacity duration-500 group-hover:scale-105"
+                                    data-alt="Technical data visualization with risk score meters and heat maps indicating geographic fraud concentrations"
                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuCp48T1sSccaiSQwdYvbIWSqUEAQuP_HxwvyyOi2_YR1WSj6-m7TpTSV5f0HbWpctDW4K03hpsq3jMB0Nu9nGjATr2ba8v6GT1KP0mmIAMmsZ4p4Jm9HLTp6Cqq6rOE5Zd8heMvOVn61BF0RT_ri19vVd8HDl35Hz-zO-u0Bjq3FnywMY_UN3KzWjcohTIZdO20BDWKQIpi7gb8-TOaHxWgjNgWRfo_SWPm-VTcSl7EmyeXnsI0i5WMMQI89YXLSaUjeyrMleDc0Lc"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-surface-container/50 to-transparent"></div>
@@ -216,7 +216,7 @@ export default function LandingPage() {
                             <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 tracking-tight">WhatsApp Confirmation</h3>
                             <p className="text-white/80 text-sm md:text-base leading-relaxed">98% open rates ensure your customers see the verification request immediately.</p>
                         </div>
-                        
+
                         <div className="bg-surface-container-lowest p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border border-outline-variant/10 shadow-sm hover:-translate-y-1 transition-all group">
                             <div className="bg-secondary/10 w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center mb-4 md:mb-5 group-hover:bg-secondary group-hover:text-white transition-colors text-secondary">
                                 <span className="material-symbols-outlined text-2xl md:text-3xl">map</span>
@@ -224,7 +224,7 @@ export default function LandingPage() {
                             <h3 className="text-xl md:text-2xl font-bold mb-2 md:mb-3 tracking-tight">Pincode Fraud Detection</h3>
                             <p className="text-sm text-on-surface-variant leading-relaxed">Automatically flag high-risk geographic areas known for failed COD deliveries.</p>
                         </div>
-                        
+
                         <div className="bg-surface-container-lowest p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border border-outline-variant/10 shadow-sm hover:-translate-y-1 transition-all group">
                             <div className="bg-tertiary/10 w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center mb-4 md:mb-5 group-hover:bg-tertiary group-hover:text-white transition-colors text-tertiary">
                                 <span className="material-symbols-outlined text-2xl md:text-3xl">block</span>
@@ -232,7 +232,7 @@ export default function LandingPage() {
                             <h3 className="text-xl md:text-2xl font-bold mb-2 md:mb-3 tracking-tight">Blacklist Management</h3>
                             <p className="text-sm text-on-surface-variant leading-relaxed">Share and access a global database of known fraudulent customers across our network.</p>
                         </div>
-                        
+
                         <div className="bg-surface-container-lowest p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] border border-outline-variant/10 shadow-sm hover:-translate-y-1 transition-all group">
                             <div className="bg-emerald-500/10 w-12 h-12 md:w-14 md:h-14 rounded-xl flex items-center justify-center mb-4 md:mb-5 group-hover:bg-emerald-500 group-hover:text-white transition-colors text-emerald-600">
                                 <span className="material-symbols-outlined text-2xl md:text-3xl">monitoring</span>
@@ -270,57 +270,57 @@ export default function LandingPage() {
                         <p className="text-base md:text-lg text-on-surface-variant font-medium mx-auto max-w-lg leading-relaxed">Pick a plan that fits your current store volume.</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-5xl mx-auto">
-                        
+
                         {/* Starter */}
                         <div className="bg-surface-container-lowest p-8 md:p-10 rounded-[2rem] border border-outline-variant/15 hover:border-primary/40 hover:shadow-lg transition-all flex flex-col group">
                             <p className="text-xs font-bold uppercase tracking-[0.15em] text-on-surface-variant mb-4 md:mb-5 bg-surface-container px-3 py-1 inline-block rounded-md self-start">Starter</p>
                             <div className="mb-6 md:mb-8 pb-6 border-b border-surface-container">
                                 <span className="text-3xl font-medium text-slate-400 align-top mr-1">₹</span>
-                                <span className="text-5xl font-black text-slate-900 tracking-tighter">1,999</span>
+                                <span className="text-5xl font-black text-slate-900 tracking-tighter">499</span>
                                 <span className="text-lg text-on-surface-variant font-medium ml-1">/mo</span>
                             </div>
                             <ul className="space-y-4 mb-8 flex-grow">
-                                <li className="flex items-start gap-3 text-sm font-medium text-on-surface"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{fontVariationSettings: "'FILL' 1"}}>check_circle</span> Up to 500 orders/mo</li>
-                                <li className="flex items-start gap-3 text-sm font-medium text-on-surface"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{fontVariationSettings: "'FILL' 1"}}>check_circle</span> Basic Risk Engine</li>
-                                <li className="flex items-start gap-3 text-sm font-medium text-on-surface"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{fontVariationSettings: "'FILL' 1"}}>check_circle</span> WhatsApp Verification</li>
+                                <li className="flex items-start gap-3 text-sm font-medium text-on-surface"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span> Up to 500 orders/mo</li>
+                                <li className="flex items-start gap-3 text-sm font-medium text-on-surface"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span> Basic Risk Engine</li>
+                                <li className="flex items-start gap-3 text-sm font-medium text-on-surface"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span> WhatsApp Verification</li>
                             </ul>
                             <Link to="/signup" className="w-full flex items-center justify-center py-4 bg-surface-container-high text-slate-700 hover:text-slate-900 hover:bg-surface-variant rounded-xl font-bold text-sm transition-colors active:scale-[0.98]">
                                 Choose Starter
                             </Link>
                         </div>
-                        
+
                         {/* Growth (Featured) */}
                         <div className="bg-surface-container-lowest p-8 md:p-10 rounded-[2rem] border-2 border-primary relative flex flex-col shadow-[0_12px_40px_-15px_rgba(70,71,211,0.3)] transform md:-translate-y-4 md:scale-105 z-10 w-full mb-6 md:mb-0 mt-6 md:mt-0">
                             <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-md">Most Popular</div>
                             <p className="text-xs font-bold uppercase tracking-[0.15em] text-primary mb-4 md:mb-5 bg-primary/10 px-3 py-1 inline-block rounded-md self-start">Growth</p>
                             <div className="mb-6 md:mb-8 pb-6 border-b border-surface-container">
                                 <span className="text-3xl font-medium text-primary/70 align-top mr-1">₹</span>
-                                <span className="text-5xl font-black text-slate-900 tracking-tighter">4,999</span>
+                                <span className="text-5xl font-black text-slate-900 tracking-tighter">999</span>
                                 <span className="text-lg text-on-surface-variant font-medium ml-1">/mo</span>
                             </div>
                             <ul className="space-y-4 mb-8 flex-grow">
-                                <li className="flex items-start gap-3 text-sm font-bold text-slate-800"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{fontVariationSettings: "'FILL' 1"}}>check_circle</span> Up to 2,500 orders/mo</li>
-                                <li className="flex items-start gap-3 text-sm font-bold text-slate-800"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{fontVariationSettings: "'FILL' 1"}}>check_circle</span> Advanced AI Risk Scoring</li>
-                                <li className="flex items-start gap-3 text-sm font-bold text-slate-800"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{fontVariationSettings: "'FILL' 1"}}>check_circle</span> Custom WhatsApp Flows</li>
-                                <li className="flex items-start gap-3 text-sm font-bold text-slate-800"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{fontVariationSettings: "'FILL' 1"}}>check_circle</span> Pincode Fraud Detection</li>
+                                <li className="flex items-start gap-3 text-sm font-bold text-slate-800"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span> Up to 2,500 orders/mo</li>
+                                <li className="flex items-start gap-3 text-sm font-bold text-slate-800"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span> Advanced AI Risk Scoring</li>
+                                <li className="flex items-start gap-3 text-sm font-bold text-slate-800"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span> Custom WhatsApp Flows</li>
+                                <li className="flex items-start gap-3 text-sm font-bold text-slate-800"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span> Pincode Fraud Detection</li>
                             </ul>
                             <Link to="/signup" className="w-full flex items-center justify-center py-4 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-bold text-sm shadow-md hover:shadow-lg hover:opacity-95 transition-all active:scale-[0.98]">
                                 Choose Growth
                             </Link>
                         </div>
-                        
+
                         {/* Scale */}
                         <div className="bg-surface-container-lowest p-8 md:p-10 rounded-[2rem] border border-outline-variant/15 hover:border-primary/40 hover:shadow-lg transition-all flex flex-col group">
                             <p className="text-xs font-bold uppercase tracking-[0.15em] text-on-surface-variant mb-4 md:mb-5 bg-surface-container px-3 py-1 inline-block rounded-md self-start">Scale</p>
                             <div className="mb-6 md:mb-8 pb-6 border-b border-surface-container">
                                 <span className="text-3xl font-medium text-slate-400 align-top mr-1">₹</span>
-                                <span className="text-5xl font-black text-slate-900 tracking-tighter">12,499</span>
+                                <span className="text-5xl font-black text-slate-900 tracking-tighter">2999</span>
                                 <span className="text-lg text-on-surface-variant font-medium ml-1">/mo</span>
                             </div>
                             <ul className="space-y-4 mb-8 flex-grow">
-                                <li className="flex items-start gap-3 text-sm font-medium text-on-surface"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{fontVariationSettings: "'FILL' 1"}}>check_circle</span> Unlimited orders</li>
-                                <li className="flex items-start gap-3 text-sm font-medium text-on-surface"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{fontVariationSettings: "'FILL' 1"}}>check_circle</span> Global Blacklist Access</li>
-                                <li className="flex items-start gap-3 text-sm font-medium text-on-surface"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{fontVariationSettings: "'FILL' 1"}}>check_circle</span> Dedicated Account Manager</li>
+                                <li className="flex items-start gap-3 text-sm font-medium text-on-surface"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span> Unlimited orders</li>
+                                <li className="flex items-start gap-3 text-sm font-medium text-on-surface"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span> Global Blacklist Access</li>
+                                <li className="flex items-start gap-3 text-sm font-medium text-on-surface"><span className="material-symbols-outlined text-primary text-base mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span> Dedicated Account Manager</li>
                             </ul>
                             <Link to="/signup" className="w-full flex items-center justify-center py-4 bg-surface-container-high text-slate-700 hover:text-slate-900 hover:bg-surface-variant rounded-xl font-bold text-sm transition-colors active:scale-[0.98]">
                                 Choose Scale
@@ -334,13 +334,13 @@ export default function LandingPage() {
             <section className="py-16 md:py-24 px-4 md:px-6 w-full pb-32">
                 <div className="max-w-6xl mx-auto bg-primary rounded-[2rem] md:rounded-[3rem] p-8 md:p-16 lg:p-24 text-center text-white relative overflow-hidden shadow-[0_20px_60px_-15px_rgba(70,71,211,0.4)]">
                     <div className="absolute inset-0 opacity-20 mix-blend-overlay">
-                        <img 
-                            alt="Abstract dynamic fluid shapes in shades of indigo and purple create a sense of professional movement and energy" 
-                            className="w-full h-full object-cover scale-110" 
+                        <img
+                            alt="Abstract dynamic fluid shapes in shades of indigo and purple create a sense of professional movement and energy"
+                            className="w-full h-full object-cover scale-110"
                             src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnKox-FF7XvPffm67xyRNwQIeAdJ5V33UiT7aV_P82FHDqAHwsM2D9ymcWXtn0syXzMy6JaRlbD8X-oxQs_MKT6cWIHFjI4zJMLo91BjkBRUFSHDTfaB_qarwZnrXAYLpRYLb7SVNq2A0et1ABYFU--OAwWyEfBIzEQ9D94jpVlPUf9eBbIm867uDp_2A8zwF1Hlrd2fUmFb5XuS2HJWbSKH6YLS2ePNCU5YtkYyPYKaLvcr-PaJVJ47UBU4vWNq8Qk0vjBftOhDg"
                         />
                     </div>
-                    
+
                     <div className="relative z-10 w-full flex flex-col items-center">
                         <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter mb-6 md:mb-8 leading-[1.1]">Start Protecting <br className="hidden md:block" />Your Orders Today</h2>
                         <p className="text-base sm:text-lg md:text-xl text-on-primary/90 mb-10 md:mb-14 max-w-xl lg:max-w-2xl mx-auto">Join 1,000+ Shopify brands that have already optimized their cash-on-delivery operations and scaled their margins.</p>
@@ -357,7 +357,7 @@ export default function LandingPage() {
                     <div className="flex flex-col items-center md:items-start gap-3 md:gap-4 text-center md:text-left">
                         <span className="text-xl md:text-2xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Codit</span>
                         <p className="font-sans text-xs md:text-sm font-medium leading-relaxed text-slate-500 max-w-xs">
-                            © 2024 Codit AI. All rights reserveds.<br/>Precision Analytics for Shopify.
+                            © 2024 Codit AI. All rights reserveds.<br />Precision Analytics for Shopify.
                         </p>
                     </div>
                     <div className="flex flex-wrap justify-center gap-4 md:gap-6 mt-4 md:mt-0">
