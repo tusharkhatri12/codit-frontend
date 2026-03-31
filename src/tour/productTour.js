@@ -59,7 +59,32 @@ export const initTour = (navigate) => {
         attachTo: {
             element: '#tour-create-test-btn',
             on: 'bottom'
-        }
+        },
+        buttons: [
+            {
+                classes: 'shepherd-button-secondary',
+                text: 'Exit',
+                type: 'cancel'
+            },
+            {
+                classes: 'shepherd-button-primary',
+                text: 'Next',
+                action: async function() {
+                    console.log('Tour: Navigating to orders page...');
+                    navigate('/dashboard/orders');
+                    
+                    const el = await waitForElement('#tour-orders-table');
+                    if (el) {
+                        console.log('Tour: Found orders table, moving to next step.');
+                        this.next();
+                    } else {
+                        console.error('Tour: Could not find orders table after navigation.');
+                        // Fallback: try to show it anyway or show a message
+                        this.next();
+                    }
+                }
+            }
+        ]
     });
 
     // Helper to wait for elements (Handles route changes)
