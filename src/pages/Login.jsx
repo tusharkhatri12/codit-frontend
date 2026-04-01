@@ -34,95 +34,167 @@ export default function Login() {
     };
 
     return (
-        <div className="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary-container min-h-screen flex items-center justify-center p-4 sm:p-6 relative overflow-hidden w-full">
-            <div className="absolute top-0 left-0 w-full p-4 sm:p-6 md:p-8 flex justify-between items-center z-10">
-                <Link to="/" className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-xl signature-gradient flex items-center justify-center text-white shadow-md">
-                        <span className="material-symbols-outlined text-sm font-bold">code</span>
-                    </div>
-                    <span className="text-xl font-black tracking-tighter text-on-surface">Codit</span>
-                </Link>
-                <Link to="/signup" className="text-sm font-bold text-on-surface-variant hover:text-primary transition-colors cursor-pointer px-4 py-2">
-                    Sign Up
-                </Link>
-            </div>
+        <div style={{ backgroundColor: '#0c1324', color: '#dce1fb', fontFamily: "'Inter', sans-serif", minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden' }}>
+            <style>{`
+                @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
 
-            <main className="w-full max-w-md z-10 relative mt-16 sm:mt-0">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-primary/20 rounded-full blur-[100px] -z-10 pointer-events-none opacity-50"></div>
+                .material-symbols-outlined {
+                    font-family: 'Material Symbols Outlined';
+                    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+                }
+                .font-headline { font-family: 'Manrope', sans-serif !important; }
+                .font-body { font-family: 'Inter', sans-serif !important; }
+                
+                .glass-card {
+                    background: rgba(46, 52, 71, 0.4);
+                    backdrop-filter: blur(20px);
+                    -webkit-backdrop-filter: blur(20px);
+                }
+                .glow-shadow {
+                    box-shadow: 0 0 40px 0 rgba(208, 188, 255, 0.06);
+                }
+                .input-focus-line {
+                    position: relative;
+                }
+                .input-focus-line::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 50%;
+                    width: 0;
+                    height: 1px;
+                    background: #d0bcff;
+                    transition: width 0.3s ease, left 0.3s ease;
+                }
+                .input-focus-line:focus-within::after {
+                    width: 100%;
+                    left: 0;
+                }
+                
+                .btn-primary {
+                    background: linear-gradient(135deg, #d0bcff, #a078ff);
+                    color: #23005c;
+                }
+                
+                input::placeholder {
+                    color: rgba(144, 143, 160, 0.4);
+                }
+            `}</style>
 
-                <div className="bg-surface-container-lowest/80 backdrop-blur-3xl rounded-[2rem] p-6 sm:p-8 md:p-10 shadow-[0_8px_32px_rgba(0,0,0,0.06)] border border-outline-variant/10 relative overflow-hidden group">
-                    <div className="text-center mb-8">
-                        <div className="w-12 h-12 mx-auto rounded-2xl signature-gradient flex items-center justify-center text-white shadow-lg mb-4">
-                            <span className="material-symbols-outlined text-2xl font-bold">lock</span>
+            {/* Top Navigation Shell */}
+            <header className="fixed top-0 w-full z-50 bg-slate-950/40 backdrop-blur-xl">
+                <div className="flex justify-between items-center px-8 py-4 w-full max-w-7xl mx-auto">
+                    <Link to="/" className="text-2xl font-bold tracking-tighter text-slate-50 font-headline no-underline">CODIT</Link>
+                    <nav className="hidden md:flex gap-8 items-center">
+                        <Link to="/" className="text-slate-400 hover:text-slate-200 transition-colors font-body text-sm font-medium no-underline">Back to Home</Link>
+                        <div className="flex items-center gap-4">
+                            <Link to="/login" className="px-5 py-2 rounded-xl text-indigo-400 hover:bg-white/5 transition-all duration-300 font-medium no-underline">Login</Link>
+                            <Link to="/signup" className="px-5 py-2 rounded-xl bg-gradient-to-br from-[#d0bcff] to-[#a078ff] text-[#23005c] font-semibold hover:shadow-[0_0_20px_rgba(208,188,255,0.4)] transition-all no-underline">Sign Up</Link>
                         </div>
-                        <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-on-surface mb-2">Welcome back</h1>
-                        <p className="text-sm text-on-surface-variant/80 font-medium">Enter your details to access your dashboard.</p>
-                    </div>
+                    </nav>
+                </div>
+            </header>
 
-                    <button type="button" className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-xl bg-surface border border-outline-variant/30 text-sm font-bold text-on-surface hover:bg-surface-container-low transition-colors shadow-sm mb-6">
-                        <img alt="Google logo icon" className="w-4 h-4" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMsZ4yA3vBthV1jO9bW5i-yQ_96fIARu3-vV75JXY5Y1D68N9FkZ_x6RjG6eE2H2-zL8h1UfN19F_kSj6kU7s7M8-L6Q_G-s6hRQd_K5h2J4yC1oGkQ9hZ8G9eX3yKk1jG_4ZlM8yQo9fX6E0aU6K1P8P1s7P3A2C1_5xT_3YVz5H7y9T5n8P_x8P5G6M3Q_V8T4G9W9v" />
-                        Log in with Google
-                    </button>
+            <main className="flex-grow flex items-center justify-center px-6 pt-24 pb-12 relative overflow-hidden">
+                {/* Background Ambient Glows */}
+                <div className="absolute top-1/4 -left-24 w-96 h-96 bg-[#d0bcff]/10 rounded-full blur-[120px] pointer-events-none"></div>
+                <div className="absolute bottom-1/4 -right-24 w-96 h-96 bg-[#ffb783]/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-                    <div className="flex items-center gap-4 mb-6">
-                        <div className="h-[1px] flex-grow bg-outline-variant/20"></div>
-                        <span className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Or</span>
-                        <div className="h-[1px] flex-grow bg-outline-variant/20"></div>
-                    </div>
-
-                    {error && (
-                        <div className="mb-4 p-3 rounded-xl bg-error/10 text-error text-sm font-medium border border-error/20 flex items-center gap-2">
-                            <span className="material-symbols-outlined text-[18px]">error</span>
-                            {error}
-                        </div>
-                    )}
-
-                    <form onSubmit={handleLogin} className="space-y-4">
-                        <div className="space-y-1.5">
-                            <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider ml-1" htmlFor="email">Email</label>
-                            <input 
-                                className="w-full bg-surface-container-high border-none rounded-xl px-4 py-3 text-sm text-on-surface focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-on-surface-variant/40" 
-                                id="email" 
-                                placeholder="alex@company.com" 
-                                required 
-                                type="email" 
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
+                {/* Login Container */}
+                <div className="w-full max-w-md relative z-10">
+                    {/* Glassmorphic Login Card */}
+                    <div className="glass-card glow-shadow rounded-[2rem] p-8 md:p-12 border border-[#464554]/15">
+                        <div className="mb-10">
+                            <h1 className="text-4xl font-extrabold font-headline tracking-tighter text-[#dce1fb] mb-3">Welcome Back</h1>
+                            <p className="text-[#c7c4d7] text-sm leading-relaxed">Access your RTO intelligence dashboard.</p>
                         </div>
 
-                        <div className="space-y-1.5">
-                            <div className="flex justify-between items-end">
-                                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider ml-1" htmlFor="password">Password</label>
-                                <a className="text-[11px] font-bold text-primary hover:underline mb-0.5" href="#">Forgot Password?</a>
+                        {error && (
+                            <div className="mb-6 p-4 rounded-xl bg-red-400/10 text-red-300 text-sm font-medium border border-red-400/20 flex items-center gap-2">
+                                <span className="material-symbols-outlined text-[18px]">error</span>
+                                {error}
                             </div>
-                            <div className="relative">
-                                <input 
-                                    className="w-full bg-surface-container-high border-none rounded-xl px-4 py-3 text-sm text-on-surface focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-on-surface-variant/40 pr-10" 
-                                    id="password" 
-                                    placeholder="••••••••" 
-                                    autoComplete="current-password"
-                                    required 
-                                    type="password" 
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                />
-                                <button className="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors" type="button">
-                                    <span className="material-symbols-outlined text-[18px]">visibility_off</span>
+                        )}
+
+                        <form onSubmit={handleLogin} className="space-y-8">
+                            {/* Email Field */}
+                            <div className="space-y-2">
+                                <label className="block text-xs font-semibold uppercase tracking-widest text-[#c7c4d7] font-label ml-1">Email Address</label>
+                                <div className="input-focus-line bg-[#070d1f] rounded-xl">
+                                    <input 
+                                        className="w-full bg-transparent border-none py-4 px-5 text-[#dce1fb] placeholder:text-[#908fa0]/40 focus:ring-0" 
+                                        placeholder="name@company.com" 
+                                        required
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                            {/* Password Field */}
+                            <div className="space-y-2">
+                                <div className="flex justify-between items-end mb-1">
+                                    <label className="block text-xs font-semibold uppercase tracking-widest text-[#c7c4d7] font-label ml-1">Password</label>
+                                    <Link to="#" className="text-xs font-medium text-[#d0bcff] hover:text-[#a078ff] transition-colors no-underline">Forgot Password?</Link>
+                                </div>
+                                <div className="input-focus-line bg-[#070d1f] rounded-xl">
+                                    <input 
+                                        className="w-full bg-transparent border-none py-4 px-5 text-[#dce1fb] placeholder:text-[#908fa0]/40 focus:ring-0" 
+                                        placeholder="••••••••" 
+                                        required
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                            {/* CTA Button */}
+                            <div className="pt-4">
+                                <button 
+                                    className="w-full py-4 px-6 rounded-2xl bg-gradient-to-br from-[#d0bcff] to-[#a078ff] text-[#23005c] font-bold text-lg hover:shadow-[0_0_30px_rgba(208,188,255,0.3)] active:scale-[0.98] transition-all duration-200 disabled:opacity-70" 
+                                    type="submit"
+                                    disabled={loading}
+                                >
+                                    {loading ? 'Signing In...' : 'Sign In'}
                                 </button>
                             </div>
-                        </div>
+                        </form>
 
-                        <button 
-                            className="w-full py-3.5 mt-4 rounded-xl signature-gradient text-white font-bold text-sm shadow-[0_8px_20px_rgba(70,71,211,0.25)] hover:shadow-[0_10px_25px_rgba(70,71,211,0.35)] active:scale-[0.98] transition-all disabled:opacity-70 flex justify-center items-center gap-2" 
-                            type="submit"
-                            disabled={loading}
-                        >
-                            {loading ? <span className="material-symbols-outlined animate-spin text-[18px]">refresh</span> : 'Log In'}
-                        </button>
-                    </form>
+                        {/* Footer Link */}
+                        <div className="mt-10 text-center">
+                            <p className="text-sm text-[#c7c4d7]">
+                                Don't have an account? 
+                                <Link to="/signup" className="text-[#d0bcff] font-semibold hover:underline underline-offset-4 decoration-2 ml-1 no-underline">Create one now</Link>
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Asymmetric Decorative Element */}
+                    <div className="mt-12 flex items-center gap-6 opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
+                        <div className="h-px flex-grow bg-gradient-to-r from-transparent via-[#d0bcff]/30 to-transparent"></div>
+                        <span className="material-symbols-outlined text-[#d0bcff]" style={{ fontVariationSettings: "'FILL' 1" }}>security</span>
+                        <div className="h-px flex-grow bg-gradient-to-r from-transparent via-[#d0bcff]/30 to-transparent"></div>
+                    </div>
                 </div>
             </main>
+
+            {/* Footer Component */}
+            <footer className="bg-slate-950 w-full py-12">
+                <div className="flex flex-col items-center gap-4 w-full">
+                    <div className="flex gap-8 mb-2">
+                        <a className="font-body text-xs uppercase tracking-widest text-slate-500 hover:text-[#a078ff] transition-colors no-underline" href="#">Privacy</a>
+                        <a className="font-body text-xs uppercase tracking-widest text-slate-500 hover:text-[#a078ff] transition-colors no-underline" href="#">Terms</a>
+                        <a className="font-body text-xs uppercase tracking-widest text-slate-500 hover:text-[#a078ff] transition-colors no-underline" href="#">Security</a>
+                    </div>
+                    <p className="font-body text-xs uppercase tracking-widest text-slate-500">© 2024 CODIT. Secure Encryption Enabled.</p>
+                </div>
+            </footer>
+
+            {/* Background texture/light leak effect */}
+            <div className="fixed inset-0 pointer-events-none z-0">
+                <div className="absolute top-0 left-0 w-full h-full opacity-[0.03]" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBIZEAMShvxACXUFV1TyrlOz_JdKEVTosgHOadIDCnimWbIupvQkHrlUps3Wz1KAfvvamj83hZ2snpRXj0wkPaiaRiwoJwpzgJAXjDDdKRRTHgDkLoYyVY1gSxNrJi6_JAEgFErqzgDLN0sUBCWdpZW0qTv99-Kobnu0nocQ8aHH1Bt9CCywbVt313_5Ah9z28KVwgTP_h-1LodqGm-necrqlI8vtQheFc91_lilAUSPj_0-eBsZutWUgYGgygnTZRamC6WwJIUNQE')" }}></div>
+            </div>
         </div>
     );
 }
