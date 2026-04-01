@@ -16,6 +16,7 @@ export default function Signup() {
         e.preventDefault();
         setError('');
         setLoading(true);
+        console.log('🚀 Signup attempt for:', email);
 
         try {
             const name = `${firstName} ${lastName}`.trim();
@@ -29,13 +30,18 @@ export default function Signup() {
                 })
             });
 
+            console.log('📦 Signup response:', { ok, status: data.status, error: data.error });
+
             if (ok) {
+                console.log('✅ Signup successful, redirecting...');
                 setToken(data.token, data.user);
                 navigate('/onboarding');
             } else {
+                console.log('❌ Signup failed:', data.error);
                 setError(data.error || 'Signup failed');
             }
         } catch (err) {
+            console.error('🔥 Signup network/server error:', err);
             setError('Failed to connect to the server');
         } finally {
             setLoading(false);
@@ -145,33 +151,37 @@ export default function Signup() {
                                 <div className="space-y-2">
                                     <label className="block font-label text-xs uppercase tracking-widest text-[#c7c4d7] font-semibold ml-1" htmlFor="firstName">First Name</label>
                                     <div className="relative group">
-                                        <input 
-                                            id="firstName"
-                                            className="w-full bg-transparent border-none border-b border-[#464554]/30 text-[#dce1fb] py-4 px-0 focus:ring-0 focus:border-[#d0bcff] transition-all placeholder:text-[#c7c4d7]/30" 
-                                            placeholder="John" 
-                                            type="text" 
-                                            required
-                                            value={firstName}
-                                            onChange={(e) => setFirstName(e.target.value)}
-                                        />
-                                        <div className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-[#d0bcff] group-focus-within:w-full group-focus-within:left-0 transition-all duration-500"></div>
-                                    </div>
+                                    <input 
+                                        id="firstName"
+                                        name="firstName"
+                                        autoComplete="given-name"
+                                        className="w-full bg-transparent border-none border-b border-[#464554]/30 text-[#dce1fb] py-4 px-0 focus:ring-0 focus:border-[#d0bcff] transition-all placeholder:text-[#c7c4d7]/30" 
+                                        placeholder="John" 
+                                        type="text" 
+                                        required
+                                        value={firstName}
+                                        onChange={(e) => setFirstName(e.target.value)}
+                                    />
+                                    <div className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-[#d0bcff] group-focus-within:w-full group-focus-within:left-0 transition-all duration-500"></div>
+                                </div>
                                 </div>
                                 {/* Last Name */}
                                 <div className="space-y-2">
                                     <label className="block font-label text-xs uppercase tracking-widest text-[#c7c4d7] font-semibold ml-1" htmlFor="lastName">Last Name</label>
                                     <div className="relative group">
-                                        <input 
-                                            id="lastName"
-                                            className="w-full bg-transparent border-none border-b border-[#464554]/30 text-[#dce1fb] py-4 px-0 focus:ring-0 focus:border-[#d0bcff] transition-all placeholder:text-[#c7c4d7]/30" 
-                                            placeholder="Doe" 
-                                            type="text" 
-                                            required
-                                            value={lastName}
-                                            onChange={(e) => setLastName(e.target.value)}
-                                        />
-                                        <div className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-[#d0bcff] group-focus-within:w-full group-focus-within:left-0 transition-all duration-500"></div>
-                                    </div>
+                                    <input 
+                                        id="lastName"
+                                        name="lastName"
+                                        autoComplete="family-name"
+                                        className="w-full bg-transparent border-none border-b border-[#464554]/30 text-[#dce1fb] py-4 px-0 focus:ring-0 focus:border-[#d0bcff] transition-all placeholder:text-[#c7c4d7]/30" 
+                                        placeholder="Doe" 
+                                        type="text" 
+                                        required
+                                        value={lastName}
+                                        onChange={(e) => setLastName(e.target.value)}
+                                    />
+                                    <div className="absolute bottom-0 left-1/2 w-0 h-[2px] bg-[#d0bcff] group-focus-within:w-full group-focus-within:left-0 transition-all duration-500"></div>
+                                </div>
                                 </div>
                             </div>
 
@@ -181,6 +191,8 @@ export default function Signup() {
                                 <div className="relative group">
                                     <input 
                                         id="email"
+                                        name="email"
+                                        autoComplete="email"
                                         className="w-full bg-transparent border-none border-b border-[#464554]/30 text-[#dce1fb] py-4 px-0 focus:ring-0 focus:border-[#d0bcff] transition-all placeholder:text-[#c7c4d7]/30" 
                                         placeholder="name@company.com" 
                                         type="email" 
@@ -198,11 +210,12 @@ export default function Signup() {
                                 <div className="relative group flex items-center">
                                     <input 
                                         id="password"
+                                        name="password"
+                                        autoComplete="new-password"
                                         className="w-full bg-transparent border-none border-b border-[#464554]/30 text-[#dce1fb] py-4 px-0 focus:ring-0 focus:border-[#d0bcff] transition-all placeholder:text-[#c7c4d7]/30 pr-10" 
                                         placeholder="••••••••" 
                                         type={showPassword ? "text" : "password"} 
                                         required
-                                        autoComplete="new-password"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                     />

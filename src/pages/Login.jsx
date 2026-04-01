@@ -13,6 +13,7 @@ export default function Login() {
         e.preventDefault();
         setError('');
         setLoading(true);
+        console.log('🚀 Login attempt for:', email);
         
         try {
             const { ok, data } = await fetchAPI('/auth/login', {
@@ -20,13 +21,18 @@ export default function Login() {
                 body: JSON.stringify({ email, password })
             });
 
+            console.log('📦 Login response:', { ok, status: data.status, error: data.error });
+
             if (ok) {
+                console.log('✅ Login successful, redirecting...');
                 setToken(data.token, data.user);
                 navigate('/dashboard');
             } else {
+                console.log('❌ Login failed:', data.error);
                 setError(data.error || 'Login failed');
             }
         } catch (err) {
+            console.error('🔥 Login network/server error:', err);
             setError('Failed to connect to the server');
         } finally {
             setLoading(false);
@@ -123,6 +129,9 @@ export default function Login() {
                                 <label className="block text-xs font-semibold uppercase tracking-widest text-[#c7c4d7] font-label ml-1">Email Address</label>
                                 <div className="input-focus-line bg-[#070d1f] rounded-xl">
                                     <input 
+                                        id="email"
+                                        name="email"
+                                        autoComplete="email"
                                         className="w-full bg-transparent border-none py-4 px-5 text-[#dce1fb] placeholder:text-[#908fa0]/40 focus:ring-0" 
                                         placeholder="name@company.com" 
                                         required
@@ -140,6 +149,9 @@ export default function Login() {
                                 </div>
                                 <div className="input-focus-line bg-[#070d1f] rounded-xl">
                                     <input 
+                                        id="password"
+                                        name="password"
+                                        autoComplete="current-password"
                                         className="w-full bg-transparent border-none py-4 px-5 text-[#dce1fb] placeholder:text-[#908fa0]/40 focus:ring-0" 
                                         placeholder="••••••••" 
                                         required
