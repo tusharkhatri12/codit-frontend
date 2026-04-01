@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchAPI, setToken } from '../utils/api';
+import { useUser } from '../context/UserContext';
 
 export default function Signup() {
     const navigate = useNavigate();
+    const { setUser } = useUser();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -33,8 +35,9 @@ export default function Signup() {
             console.log('📦 Signup response:', { ok, status: data.status, error: data.error });
 
             if (ok) {
-                console.log('✅ Signup successful, redirecting...');
+                console.log('✅ Signup successful, updating context and redirecting...');
                 setToken(data.token, data.user);
+                setUser(data.user);
                 navigate('/onboarding');
             } else {
                 console.log('❌ Signup failed:', data.error);
