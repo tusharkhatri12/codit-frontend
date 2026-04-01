@@ -109,6 +109,57 @@ export default function OrderDetailsModal({ order: initialOrder, onClose, loadin
                             </div>
                         </div>
 
+                        {/* Partial Payment Info */}
+                        {order.paymentRequired && (
+                            <div style={{ ...styles.section, borderBottom: '1px solid #f1f5f9', background: order.paymentStatus === 'paid' ? '#f0fdf4' : '#fffbeb' }}>
+                                <div style={styles.sectionHeader}>
+                                    <span className="material-symbols-outlined" style={{ color: order.paymentStatus === 'paid' ? '#15803d' : '#b45309', fontSize: 20 }}>payments</span>
+                                    <h3 style={styles.sectionTitle}>Partial Payment Info</h3>
+                                    <span style={{ 
+                                        ...styles.badge, 
+                                        background: order.paymentStatus === 'paid' ? '#dcfce7' : '#fef3c7', 
+                                        color: order.paymentStatus === 'paid' ? '#15803d' : '#b45309',
+                                        marginLeft: 'auto'
+                                    }}>
+                                        {order.paymentStatus?.toUpperCase()}
+                                    </span>
+                                </div>
+                                <div style={styles.grid4}>
+                                    <div style={styles.infoCell}>
+                                        <p style={styles.label}>ADVANCE AMOUNT</p>
+                                        <p style={styles.valueXl}>₹{(order.paymentAmount || 100).toLocaleString()}</p>
+                                    </div>
+                                    <div style={styles.infoCell}>
+                                        <p style={styles.label}>PAYMENT LINK</p>
+                                        <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 4 }}>
+                                            <button 
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    if (order.paymentLink) {
+                                                        navigator.clipboard.writeText(order.paymentLink);
+                                                        alert('Payment link copied!');
+                                                    }
+                                                }}
+                                                style={{ 
+                                                    ...styles.simulateBtn, 
+                                                    maxWidth: 100, 
+                                                    padding: '6px 8px', 
+                                                    background: '#6366f1',
+                                                    fontSize: 9,
+                                                    margin: 0
+                                                }}
+                                            >
+                                                COPY LINK
+                                            </button>
+                                            {order.paymentStatus === 'pending' && order.paymentLink && (
+                                                <a href={order.paymentLink} target="_blank" rel="noreferrer" style={{ fontSize: 10, color: '#6366f1', textDecoration: 'underline', fontWeight: 700 }}>TEST LINK</a>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                         {/* Risk Analysis */}
                         <div style={{ ...styles.section, borderBottom: '1px solid #f1f5f9' }}>
                             <div style={styles.sectionHeader}>

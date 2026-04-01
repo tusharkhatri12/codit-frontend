@@ -34,6 +34,8 @@ export default function Orders() {
         if (activeTab === 'pending') params.append('orderStatus', 'pending_review');
         if (activeTab === 'held') params.append('orderStatus', 'held');
         if (activeTab === 'canceled') params.append('orderStatus', 'canceled');
+        if (activeTab === 'awaiting_payment') params.append('paymentStatus', 'pending');
+        if (activeTab === 'payment_completed') params.append('paymentStatus', 'paid');
         
         if (dateRange === 'last30') {
             const past = new Date();
@@ -244,6 +246,8 @@ export default function Orders() {
                     <button onClick={() => { setActiveTab('pending'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'pending' ? 'bg-white shadow-sm text-amber-600' : 'text-slate-500 hover:text-slate-900'}`}>Review</button>
                     <button onClick={() => { setActiveTab('held'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'held' ? 'bg-white shadow-sm text-orange-600' : 'text-slate-500 hover:text-slate-900'}`}>Held</button>
                     <button onClick={() => { setActiveTab('canceled'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'canceled' ? 'bg-white shadow-sm text-slate-800' : 'text-slate-500 hover:text-slate-900'}`}>Canceled</button>
+                    <button onClick={() => { setActiveTab('awaiting_payment'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'awaiting_payment' ? 'bg-white shadow-sm text-amber-500' : 'text-slate-500 hover:text-slate-900'}`}>Awaiting Payment</button>
+                    <button onClick={() => { setActiveTab('payment_completed'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'payment_completed' ? 'bg-white shadow-sm text-emerald-500' : 'text-slate-500 hover:text-slate-900'}`}>Payment Received</button>
                 </div>
                 
                 <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
@@ -281,7 +285,8 @@ export default function Orders() {
                                 <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">Contact</th>
                                 <th id="tour-header-score" className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">AI Risk Score</th>
                                 <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">Risk Status</th>
-                                <th id="tour-header-action" className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">Action Taken</th>
+                                 <th id="tour-header-action" className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">Action Taken</th>
+                                <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">Payment Status</th>
                                 <th id="tour-header-whatsapp" className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">WhatsApp</th>
                                 <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500 text-right">Actions</th>
                             </tr>
@@ -374,6 +379,20 @@ export default function Orders() {
                                                         {order.decisionReason || 'Waiting for reply'}
                                                     </span>
                                                 </div>
+                                            </td>
+                                            <td className="px-6 py-5">
+                                                {order.paymentRequired ? (
+                                                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold ${
+                                                        order.paymentStatus === 'paid' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700 animate-pulse-slow'
+                                                    }`}>
+                                                        <span className="material-symbols-outlined text-[14px]">
+                                                            {order.paymentStatus === 'paid' ? 'check_circle' : 'payments'}
+                                                        </span>
+                                                        {order.paymentStatus === 'paid' ? 'Payment Received ✅' : 'Awaiting Payment 💰'}
+                                                    </span>
+                                                ) : (
+                                                    <span className="text-xs text-slate-400">—</span>
+                                                )}
                                             </td>
                                             <td className="px-6 py-5">
                                                 <span className="text-xs font-semibold px-2 py-1 bg-slate-100 text-slate-600 rounded">

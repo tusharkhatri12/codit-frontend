@@ -10,6 +10,7 @@ export default function Dashboard() {
         highRiskOrders: 0,
         lowRiskOrders: 0,
         estimatedRtoSaved: 0,
+        advancePaymentsCollected: 0,
         recentActivity: []
     });
     const [loading, setLoading] = useState(true);
@@ -193,9 +194,15 @@ export default function Dashboard() {
                     <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">Confirmed</p>
                     <h2 className="text-3xl font-black text-slate-900 text-emerald-600">{stats.confirmedOrders.toLocaleString()}</h2>
                 </div>
-                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">RTO Saved</p>
+                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-primary">
+                    <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1 font-inter">Advance Collected</p>
+                    <h2 className="text-3xl font-black text-slate-900">₹{(stats.advancePaymentsCollected || 0).toLocaleString()}</h2>
+                    <p className="text-[10px] text-emerald-600 font-bold mt-1 uppercase tracking-tighter">Instant Recovery Active</p>
+                </div>
+                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
+                    <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1 font-inter">RTO Saved</p>
                     <h2 className="text-3xl font-black text-slate-900">₹{(stats.estimatedRtoSaved || 0).toLocaleString()}</h2>
+                    <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">AI Prevention Layer</p>
                 </div>
             </section>
 
@@ -231,7 +238,12 @@ export default function Dashboard() {
                                                         'bg-emerald-100 text-emerald-700'
                                                     }`}>{order.riskLevel}</span>
                                                 </td>
-                                                <td className="px-6 py-4 text-right">
+                                                 <td className="px-6 py-4 text-right flex items-center justify-end gap-2">
+                                                    {order.paymentRequired && (
+                                                        <span className="material-symbols-outlined text-amber-500 text-sm" title={order.paymentStatus === 'paid' ? 'Partial Payment Received' : 'Awaiting Partial Payment'}>
+                                                            {order.paymentStatus === 'paid' ? 'check_circle' : 'pending'}
+                                                        </span>
+                                                    )}
                                                     <button onClick={() => viewOrder(order._id)} className="text-xs font-bold text-indigo-600 hover:underline px-2 py-1">VIEW</button>
                                                 </td>
                                             </tr>
