@@ -25,7 +25,7 @@ export default function Signup() {
                     name, 
                     email, 
                     password,
-                    role: 'merchant' // Default role
+                    role: 'user' // Corrected from 'merchant' to match backend enum
                 })
             });
 
