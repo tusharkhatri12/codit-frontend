@@ -73,58 +73,29 @@ export default function DashboardLayout() {
     const navLinkClass = ({ isActive }) => 
         `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 cursor-pointer select-none font-medium text-sm ` +
         (isActive 
-            ? "bg-white text-indigo-600 shadow-sm font-semibold border-l-4 border-indigo-600 pl-3" 
-            : "text-slate-600 hover:bg-slate-100 border-l-4 border-transparent pl-3");
+            ? "text-[#d0bcff] font-bold bg-[#2e3447]/50 scale-95 duration-150 shadow-[0_0_15px_rgba(208,188,255,0.1)]" 
+            : "text-slate-400 hover:bg-[#151b2d] hover:text-white");
 
     return (
-        <div className="flex bg-slate-50 text-slate-900 h-full min-h-screen overflow-hidden font-body antialiased">
+        <div className="flex bg-[#0c1324] text-[#dce1fb] h-full min-h-screen overflow-hidden font-body antialiased">
             <TourManager />
             
             {/* Mobile Sidebar Overlay */}
             {sidebarOpen && (
-                <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
             )}
 
             {/* Sidebar */}
-            <aside className={`h-screen w-72 fixed left-0 top-0 flex flex-col bg-slate-50 font-sans z-50 overflow-y-auto transform transition-transform duration-300 border-r border-slate-200/50 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
-                <div className="p-6 flex flex-col gap-1">
-                    <div className="mb-8 px-2 flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-sm">
-                                <span className="material-symbols-outlined text-sm" style={{fontVariationSettings: "'FILL' 1"}}>security</span>
-                            </div>
-                            <div>
-                                <h1 className="text-lg font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent leading-none">Codit AI</h1>
-                                <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mt-1 leading-none">Fraud Protection</p>
-                            </div>
+            <aside className={`h-screen w-64 fixed left-0 top-0 flex flex-col bg-[#0c1324] font-headline z-50 overflow-y-auto transform transition-transform duration-300 border-r border-outline-variant/10 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+                <div className="p-8 flex flex-col h-full">
+                    <div className="mb-10 px-2">
+                        <div className="flex flex-col">
+                            <h1 className="text-2xl font-black tracking-tighter text-[#d0bcff]">CODIT</h1>
+                            <p className="text-[10px] uppercase tracking-widest text-slate-500 font-bold mt-1">Technical Prestige</p>
                         </div>
                     </div>
 
-                    {/* Mode Toggle Section (Sidebar) */}
-                    <div className="px-2 mb-8">
-                        <div className={`p-3 rounded-2xl border ${user?.mode === 'live' ? 'bg-indigo-50 border-indigo-100' : 'bg-slate-100 border-slate-200'} transition-all`}>
-                            <div className="flex items-center justify-between mb-2">
-                                <span className={`text-[10px] font-black uppercase tracking-widest ${user?.mode === 'live' ? 'text-indigo-600' : 'text-slate-500'}`}>
-                                    {user?.mode === 'live' ? 'Live Mode' : 'Demo Mode'}
-                                </span>
-                                <div className={`w-2 h-2 rounded-full ${user?.mode === 'live' ? 'bg-indigo-500 animate-pulse' : 'bg-slate-400'}`}></div>
-                            </div>
-                            <button 
-                                onClick={handleSwitchMode}
-                                disabled={switching}
-                                className={`w-full py-2 px-3 rounded-xl text-[11px] font-bold transition-all shadow-sm active:scale-95 flex items-center justify-center gap-2 ${
-                                    user?.mode === 'live' 
-                                    ? 'bg-white text-slate-600 hover:bg-slate-50' 
-                                    : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-indigo-200'
-                                }`}
-                            >
-                                <span className="material-symbols-outlined text-sm">{user?.mode === 'live' ? 'science' : 'rocket_launch'}</span>
-                                {switching ? 'Switching...' : (user?.mode === 'live' ? 'Switch to Demo' : 'Go Live')}
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <nav className="flex flex-col gap-1 flex-1">
+                    <nav className="flex flex-col gap-2 flex-grow">
                         <NavLink to="/dashboard" end className={navLinkClass} onClick={() => setSidebarOpen(false)}>
                             <span className="material-symbols-outlined">dashboard</span>
                             <span>Dashboard</span>
@@ -146,130 +117,131 @@ export default function DashboardLayout() {
                             <span>Settings</span>
                         </NavLink>
                     </nav>
-                </div>
 
-                <div className="mt-auto pt-4 p-6 flex flex-col gap-1 border-t border-slate-200/50">
-                    <div className="bg-gradient-to-br from-indigo-600 to-purple-700 p-4 rounded-xl mb-6 text-white shadow-lg shadow-indigo-500/20">
-                        <p className="text-[11px] font-bold uppercase tracking-wider opacity-80 mb-1 leading-none">Current Plan</p>
-                        <p className="text-sm font-bold mb-3 leading-none capitalize">{user?.plan || 'Starter'} Plan</p>
-                        <button className="w-full py-2 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-lg text-xs font-bold transition-colors shadow-sm active:scale-95">Manage Plan</button>
+                    <div className="mt-8 space-y-4">
+                        {/* Mode Toggle Section (Sidebar Upgrade) */}
+                        <div className={`p-4 rounded-2xl border ${user?.mode === 'live' ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-[#2e3447]/40 border-outline-variant/10'}`}>
+                            <div className="flex items-center justify-between mb-3">
+                                <span className={`text-[10px] font-black uppercase tracking-widest ${user?.mode === 'live' ? 'text-emerald-400' : 'text-slate-500'}`}>
+                                    {user?.mode === 'live' ? 'Live System' : 'Internal Demo'}
+                                </span>
+                                <div className={`w-2 h-2 rounded-full ${user?.mode === 'live' ? 'bg-emerald-500 animate-pulse' : 'bg-slate-500'}`}></div>
+                            </div>
+                            <button 
+                                onClick={handleSwitchMode}
+                                disabled={switching}
+                                className={`w-full py-2.5 px-3 rounded-xl text-[11px] font-bold transition-all shadow-sm active:scale-95 flex items-center justify-center gap-2 ${
+                                    user?.mode === 'live' 
+                                    ? 'bg-[#151b2d] text-slate-300 hover:text-white' 
+                                    : 'bg-gradient-to-br from-primary to-primary-container text-on-primary-fixed shadow-[0_0_15px_rgba(208,188,255,0.2)]'
+                                }`}
+                            >
+                                <span className="material-symbols-outlined text-sm">{user?.mode === 'live' ? 'science' : 'rocket_launch'}</span>
+                                {switching ? 'Switching...' : (user?.mode === 'live' ? 'Switch to Demo' : 'Go Live')}
+                            </button>
+                        </div>
+
+                        <button onClick={logout} className="w-full flex items-center gap-3 px-4 py-3 text-error/80 hover:text-error hover:bg-error/5 rounded-xl transition-all cursor-pointer font-medium text-sm">
+                            <span className="material-symbols-outlined">logout</span>
+                            <span>Logout</span>
+                        </button>
                     </div>
-                    <a className="flex items-center gap-3 px-4 py-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-all cursor-pointer font-medium text-sm">
-                        <span className="material-symbols-outlined text-sm">contact_support</span>
-                        <span>Support</span>
-                    </a>
-                    <button onClick={logout} className="w-full flex items-center gap-3 px-4 py-2 text-red-500 hover:bg-red-50 rounded-xl transition-all cursor-pointer font-medium text-sm">
-                        <span className="material-symbols-outlined text-sm">logout</span>
-                        <span>Logout</span>
-                    </button>
                 </div>
             </aside>
 
             {/* Main Content Area */}
-            <main className="lg:ml-72 min-h-screen flex flex-col w-full h-screen overflow-y-auto overflow-x-hidden bg-white">
+            <main className="lg:ml-64 min-h-screen flex flex-col w-full h-screen overflow-y-auto overflow-x-hidden">
                 
-                {/* Unified Header */}
-                <header className="w-full sticky top-0 z-30 bg-white/80 backdrop-blur-xl shadow-sm border-b border-slate-200/50">
-                    <div className="flex items-center justify-between px-4 md:px-8 py-3 md:py-4 w-full h-[72px]">
-                        <div className="flex items-center gap-4 flex-1">
-                            <button className="lg:hidden text-slate-500 hover:text-indigo-600 transition-colors shrink-0" onClick={() => setSidebarOpen(true)}>
-                                <span className="material-symbols-outlined text-2xl">menu</span>
-                            </button>
-                            <h2 className="text-xl font-bold tracking-tighter text-slate-900 hidden sm:block whitespace-nowrap min-w-[120px]">{getPageTitle()}</h2>
-                            <span className="text-xl font-black tracking-tighter text-slate-900 sm:hidden whitespace-nowrap">Codit</span>
-
-                            <div className="hidden md:flex relative items-center bg-slate-100 rounded-full px-4 py-1.5 flex-1 max-w-md xl:max-w-lg transition-all border border-transparent focus-within:border-indigo-500/30 focus-within:bg-white">
-                                <span className="material-symbols-outlined text-slate-400 text-lg mr-2 shrink-0">search</span>
-                                <input className="bg-transparent border-none focus:ring-0 text-sm w-full outline-none text-slate-700 placeholder-slate-400" placeholder={getSearchPlaceholder()} type="text"/>
-                            </div>
+                {/* TopNavBar Component Integration */}
+                <header className="sticky top-0 z-50 flex justify-between items-center px-4 md:px-8 py-4 w-full bg-[#1b2336]/40 backdrop-blur-md border-b border-outline-variant/5 shadow-[0_20px_50px_rgba(208,188,255,0.06)] font-headline text-sm">
+                    <div className="flex items-center gap-4 md:gap-6 flex-1">
+                        <button className="lg:hidden text-slate-400 hover:text-white transition-colors shrink-0" onClick={() => setSidebarOpen(true)}>
+                            <span className="material-symbols-outlined text-2xl">menu</span>
+                        </button>
+                        
+                        <div className="hidden md:flex relative items-center w-full max-w-md focus-within:ring-1 focus-within:ring-[#d0bcff]/30 rounded-full bg-surface-container-lowest transition-all">
+                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 material-symbols-outlined">search</span>
+                            <input className="w-full bg-transparent border-none focus:ring-0 pl-12 py-2.5 text-on-surface text-xs md:text-sm" placeholder={getSearchPlaceholder()} type="text"/>
                         </div>
                         
-                        <div className="flex items-center gap-3 md:gap-5 shrink-0 ml-4">
-                            {/* Mode Badge (Header) */}
-                            <div className={`hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full border text-[10px] font-black uppercase tracking-widest ${user?.mode === 'live' ? 'bg-indigo-50 border-indigo-200 text-indigo-600' : 'bg-slate-100 border-slate-200 text-slate-500'}`}>
-                                <span className={`w-1.5 h-1.5 rounded-full ${user?.mode === 'live' ? 'bg-indigo-500 animate-pulse' : 'bg-slate-400'}`}></span>
-                                {user?.mode === 'live' ? 'Live' : 'Demo'}
+                        <h2 className="text-lg font-black tracking-tighter text-on-surface md:hidden">{getPageTitle()}</h2>
+                    </div>
+                    
+                    <div className="flex items-center gap-3 md:gap-4 shrink-0">
+                        {/* Live Status Indicator */}
+                        <div className={`hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-bold border ${user?.mode === 'live' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'}`}>
+                            <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${user?.mode === 'live' ? 'bg-emerald-500' : 'bg-amber-500'}`}></span>
+                            {user?.mode === 'live' ? 'Live System' : 'Demo Mode'}
+                        </div>
+
+                        <button 
+                            id="tour-start-tour"
+                            onClick={() => window.dispatchEvent(new CustomEvent('start-product-tour'))}
+                            className="hidden lg:flex items-center gap-2 text-slate-400 hover:text-white px-3 py-2 rounded-full hover:bg-white/5 transition-all text-[11px] font-bold uppercase tracking-wider"
+                        >
+                            <span className="material-symbols-outlined text-lg">explore</span>
+                            Tour
+                        </button>
+
+                        <div className="flex items-center gap-2 md:gap-3 ml-2 md:ml-4">
+                            <div className="relative group cursor-pointer">
+                                <span className="material-symbols-outlined text-slate-400 group-hover:text-white transition-colors" title="Notifications">notifications</span>
+                                <span className="absolute top-0 right-0 w-1.5 h-1.5 bg-primary rounded-full"></span>
                             </div>
-
-                            <button 
-                                id="tour-start-tour"
-                                onClick={() => window.dispatchEvent(new CustomEvent('start-product-tour'))}
-                                className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-[10px] font-black uppercase tracking-widest hover:bg-indigo-100 transition-all active:scale-95"
-                            >
-                                <span className="material-symbols-outlined text-[14px]">explore</span>
-                                Product Tour
-                            </button>
-
-                            <button className="p-2 text-slate-500 hover:bg-slate-50 hover:text-indigo-600 transition-colors rounded-full relative active:scale-95">
-                                <span className="material-symbols-outlined">notifications</span>
-                                <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-                            </button>
-                            
-                            <div className="h-8 w-[1px] bg-slate-200 hidden sm:block mx-1"></div>
                             
                             <div className="relative" ref={dropdownRef}>
                                 <div 
-                                    className="flex items-center gap-3 cursor-pointer hover:bg-slate-50 p-1 rounded-xl transition-all"
+                                    className="flex items-center gap-3 cursor-pointer p-0.5 rounded-full border-2 border-primary/20 hover:border-primary/40 transition-all overflow-hidden"
                                     onClick={() => setProfileOpen(!profileOpen)}
                                 >
-                                    <div className="text-right hidden sm:block">
-                                        <p className="text-sm font-bold text-slate-900 leading-tight">{user?.name || 'User'}</p>
-                                        <p className="text-[10px] text-slate-500 font-medium">{user?.role || 'Member'}</p>
+                                    <div className="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden bg-surface-container-highest flex items-center justify-center text-primary font-black text-xs">
+                                        {user?.avatar ? (
+                                            <img alt="User profile" className="w-full h-full object-cover" src={user.avatar}/>
+                                        ) : (
+                                            getUserInitials()
+                                        )}
                                     </div>
-                                    {user?.avatar ? (
-                                        <img alt="User profile" className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/10 shadow-sm bg-slate-200" src={user.avatar}/>
-                                    ) : (
-                                        <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-sm ring-2 ring-indigo-50">
-                                            {getUserInitials()}
-                                        </div>
-                                    )}
                                 </div>
 
-                                {/* Profile Dropdown */}
+                                {/* Profile Dropdown Redesigned */}
                                 {profileOpen && (
-                                    <div className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50 animate-in fade-in zoom-in duration-200 origin-top-right">
-                                        <div className="px-4 py-3 border-b border-slate-50 mb-2">
-                                            <p className="text-sm font-bold text-slate-900">{user?.name}</p>
-                                            <p className="text-xs text-slate-500 truncate">{user?.email}</p>
+                                    <div className="absolute right-0 mt-3 w-64 bg-surface-container rounded-2xl shadow-2xl border border-outline-variant/10 py-2 z-50 animate-in fade-in zoom-in duration-200 origin-top-right backdrop-blur-xl">
+                                        <div className="px-5 py-4 border-b border-outline-variant/10 mb-2">
+                                            <p className="text-sm font-black text-on-surface">{user?.name}</p>
+                                            <p className="text-[10px] text-slate-400 truncate mt-0.5">{user?.email}</p>
                                         </div>
                                         
                                         <div className="px-2 flex flex-col gap-1">
-                                            <div className="flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-600">
-                                                <span>Plan</span>
-                                                <span className="bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded-lg uppercase text-[9px]">{user?.plan}</span>
+                                            <div className="flex mt-1 items-center justify-between px-3 py-2 text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                                                <span>Plan: {user?.plan}</span>
+                                                <button className="text-primary hover:underline lowercase font-bold">Upgrade</button>
                                             </div>
-                                            <div className="flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-600">
-                                                <span>Environment</span>
-                                                <span className={`${user?.mode === 'live' ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-500'} px-2 py-0.5 rounded-lg uppercase text-[9px]`}>{user?.mode}</span>
-                                            </div>
-                                            
-                                            <div className="h-[1px] bg-slate-50 my-1 mx-2"></div>
                                             
                                             <button 
                                                 onClick={handleSwitchMode}
-                                                className="w-full flex items-center gap-3 px-3 py-2 text-slate-700 hover:bg-slate-50 rounded-xl transition-all text-sm font-medium"
+                                                className="w-full flex items-center gap-3 px-3 py-3 text-slate-300 hover:text-white hover:bg-[#2e3447] rounded-xl transition-all text-sm font-medium"
                                             >
-                                                <span className="material-symbols-outlined text-lg text-slate-400">{user?.mode === 'live' ? 'science' : 'rocket_launch'}</span>
-                                                <span>{user?.mode === 'live' ? 'Switch to Demo' : 'Go Live Now'}</span>
+                                                <span className="material-symbols-outlined text-lg text-primary">{user?.mode === 'live' ? 'science' : 'rocket_launch'}</span>
+                                                <span>{user?.mode === 'live' ? 'Enter Simulation' : 'Activate Live Mode'}</span>
                                             </button>
                                             
                                             <Link 
                                                 to="/dashboard/settings"
-                                                className="flex items-center gap-3 px-3 py-2 text-slate-700 hover:bg-slate-50 rounded-xl transition-all text-sm font-medium"
+                                                className="flex items-center gap-3 px-3 py-3 text-slate-300 hover:text-white hover:bg-[#2e3447] rounded-xl transition-all text-sm font-medium"
                                                 onClick={() => setProfileOpen(false)}
                                             >
                                                 <span className="material-symbols-outlined text-lg text-slate-400">settings</span>
-                                                <span>Account Settings</span>
+                                                <span>System Settings</span>
                                             </Link>
                                             
-                                            <div className="h-[1px] bg-slate-50 my-1 mx-2"></div>
+                                            <div className="h-[1px] bg-outline-variant/10 my-1 mx-2"></div>
                                             
                                             <button 
                                                 onClick={logout}
-                                                className="w-full flex items-center gap-3 px-3 py-2 text-red-500 hover:bg-red-50 rounded-xl transition-all text-sm font-medium"
+                                                className="w-full flex items-center gap-3 px-3 py-3 text-error/80 hover:text-error hover:bg-error/10 rounded-xl transition-all text-sm font-medium"
                                             >
-                                                <span className="material-symbols-outlined text-lg text-red-400">logout</span>
-                                                <span>Sign Out</span>
+                                                <span className="material-symbols-outlined text-lg">logout</span>
+                                                <span>Terminate Session</span>
                                             </button>
                                         </div>
                                     </div>
@@ -280,8 +252,12 @@ export default function DashboardLayout() {
                 </header>
 
                 {/* Page Content Rendered Here */}
-                <Outlet />
-
+                <div className="flex-1 overflow-y-auto">
+                    <Outlet />
+                </div>
+                
+                {/* Sticky Bottom Gradient for depth (from Stitch) */}
+                <div className="fixed bottom-0 lg:left-64 right-0 h-24 bg-gradient-to-t from-[#0c1324] to-transparent pointer-events-none z-10"></div>
             </main>
         </div>
     );

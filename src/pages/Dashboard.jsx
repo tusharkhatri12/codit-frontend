@@ -26,7 +26,6 @@ export default function Dashboard() {
     });
     const [orderDetail, setOrderDetail] = useState(null);
     const [detailLoading, setDetailLoading] = useState(false);
-    const [metrics, setMetrics] = useState({ aiCatchRate: 0, preventedLoss: 0, systemHealth: 'Optimal', aiNodesActive: 3, weeklyImprovement: 0, flaggedAttempts: 0 });
 
     const loadHeldOrders = useCallback(async () => {
         try {
@@ -41,13 +40,10 @@ export default function Dashboard() {
 
     const handleRelease = async (orderId) => {
         setActionLoading(orderId + '-release');
-        const previousActivity = [...stats.recentActivity];
-        
         try {
             const { ok } = await fetchAPI(`/orders/${orderId}/release`, { method: 'POST' });
             if (!ok) throw new Error('Release failed');
             
-            // Refresh counts and list
             const { ok: statsOk, data: statsData } = await fetchAPI('/analytics/summary');
             if (statsOk && statsData.data) setStats(prev => ({ ...prev, ...statsData.data }));
             await loadHeldOrders();
@@ -101,7 +97,6 @@ export default function Dashboard() {
                 if (statsOk && statsData.data) setStats(prev => ({ ...prev, ...statsData.data }));
                 await loadHeldOrders();
 
-                // AUTOMATIC TOUR RESUME
                 if (window.tourInstance) {
                     window.tourInstance.show('orders-table');
                 }
@@ -148,108 +143,136 @@ export default function Dashboard() {
 
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const isDemo = user.mode === 'demo';
-    const totalRisk = (stats.lowRiskOrders + stats.highRiskOrders) || 1;
-    const getPercent = (val) => Math.round((val / totalRisk) * 100);
 
     return (
-        <div className="p-4 md:p-8 space-y-8 w-full max-w-7xl mx-auto flex-grow bg-white">
+        <div className="p-4 md:p-8 space-y-10 w-full max-w-7xl mx-auto flex-grow">
+            {/* Demo/Live Status Banner Styled for Dark Theme */}
             {isDemo && (
-                <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center justify-between shadow-sm animate-in fade-in duration-500">
+                <div className="bg-[#2e3447]/40 border border-amber-500/20 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between shadow-lg backdrop-blur-md animate-in fade-in duration-500 gap-4">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-amber-100 rounded-full text-amber-600"><span className="material-symbols-outlined">info</span></div>
+                        <div className="p-2 bg-amber-500/10 rounded-full text-amber-500"><span className="material-symbols-outlined">info</span></div>
                         <div>
-                            <p className="text-sm font-bold text-amber-900">Demo Mode Active</p>
-                            <p className="text-xs text-amber-700">Simulate orders to test the risk engine.</p>
+                            <p className="text-sm font-black text-on-surface uppercase tracking-tighter">Simulation Active</p>
+                            <p className="text-xs text-slate-400">Inject orders to see the deterministic engine in action.</p>
                         </div>
                     </div>
-                    <button id="tour-create-test-btn" onClick={() => setIsTestModalOpen(true)} className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold rounded-xl shadow-md transition-all">Create Test Order</button>
+                    <button id="tour-create-test-btn" onClick={() => setIsTestModalOpen(true)} className="px-6 py-2.5 bg-gradient-to-br from-primary to-primary-container text-on-primary-fixed text-[10px] font-black uppercase tracking-widest rounded-xl shadow-[0_0_15px_rgba(208,188,255,0.2)] hover:opacity-90 transition-all active:scale-95">Create Test Order</button>
                 </div>
             )}
 
-            {!isDemo && (
-                 <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 flex items-center gap-3 shadow-sm">
-                    <div className="p-2 bg-emerald-100 rounded-full text-emerald-600"><span className="material-symbols-outlined">hub</span></div>
-                    <div>
-                        <p className="text-sm font-bold text-emerald-900">Connected to Store</p>
-                        <p className="text-xs text-emerald-700">Live protection active for your Shopify store.</p>
-                    </div>
-                </div>
-            )}
-
-            <section id="tour-dashboard-header" className="flex flex-col gap-2">
-                <h1 className="text-3xl font-black text-slate-900 uppercase">CODIT Insights</h1>
-                <p className="text-slate-500 text-sm font-medium">Real-time fraud detection and order management.</p>
+            <section id="tour-dashboard-header" className="max-w-4xl space-y-2">
+                <h2 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight text-on-surface uppercase leading-tight">CODIT INSIGHTS</h2>
+                <p className="text-slate-400 text-sm md:text-lg font-body">Real-time fraud detection and order management for enterprise scale.</p>
             </section>
             
-            <section id="tour-metrics-section" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
-                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">Total Orders</p>
-                    <h2 className="text-3xl font-black text-slate-900">{stats.totalOrders.toLocaleString()}</h2>
+            {/* Metric Cards (Bento Grid Style) */}
+            <section id="tour-metrics-section" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
+                <div className="glass-card purple-glow p-6 rounded-2xl flex flex-col gap-4 group hover:bg-[#2e3447]/60 transition-all">
+                    <div className="flex justify-between items-start">
+                        <span className="text-primary material-symbols-outlined">inventory_2</span>
+                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-none">TOTAL</span>
+                    </div>
+                    <div>
+                        <h3 className="text-3xl font-bold text-on-surface">{stats.totalOrders.toLocaleString()}</h3>
+                        <p className="text-xs text-slate-500 mt-1 font-medium">Total Orders</p>
+                    </div>
                 </div>
-                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">High Risk</p>
-                    <h2 className="text-3xl font-black text-slate-900 text-rose-600">{stats.highRiskOrders.toLocaleString()}</h2>
+
+                <div className="glass-card p-6 rounded-2xl flex flex-col gap-4 border-l-2 border-error/40 hover:border-error transition-all group">
+                    <div className="flex justify-between items-start">
+                        <span className="text-error material-symbols-outlined">gpp_maybe</span>
+                        <span className="text-[10px] font-bold text-error/60 uppercase tracking-widest leading-none">URGENT</span>
+                    </div>
+                    <div>
+                        <h3 className="text-3xl font-bold text-on-surface text-error">{stats.highRiskOrders.toLocaleString()}</h3>
+                        <p className="text-xs text-slate-500 mt-1 font-medium">High Risk Orders</p>
+                    </div>
                 </div>
-                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                    <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">Confirmed</p>
-                    <h2 className="text-3xl font-black text-slate-900 text-emerald-600">{stats.confirmedOrders.toLocaleString()}</h2>
+
+                <div className="glass-card p-6 rounded-2xl flex flex-col gap-4 border-l-2 border-emerald-500/40 hover:border-emerald-500 transition-all group">
+                    <div className="flex justify-between items-start">
+                        <span className="text-emerald-400 material-symbols-outlined">check_circle</span>
+                        <span className="text-[10px] font-bold text-emerald-500/60 uppercase tracking-widest leading-none">VERIFIED</span>
+                    </div>
+                    <div>
+                        <h3 className="text-3xl font-bold text-on-surface text-emerald-400">{stats.confirmedOrders.toLocaleString()}</h3>
+                        <p className="text-xs text-slate-500 mt-1 font-medium">Confirmed Orders</p>
+                    </div>
                 </div>
-                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-primary">
-                    <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1 font-inter">Advance Collected</p>
-                    <h2 className="text-3xl font-black text-slate-900">₹{(stats.advancePaymentsCollected || 0).toLocaleString()}</h2>
-                    <p className="text-[10px] text-emerald-600 font-bold mt-1 uppercase tracking-tighter">Instant Recovery Active</p>
+
+                <div className="glass-card purple-glow p-6 rounded-2xl flex flex-col gap-4 border-l-2 border-primary/40 hover:border-primary transition-all group">
+                    <div className="flex justify-between items-start">
+                        <span className="text-primary material-symbols-outlined">payments</span>
+                        <span className="text-[10px] font-bold text-primary/60 uppercase tracking-widest leading-none">SECURED</span>
+                    </div>
+                    <div>
+                        <h3 className="text-3xl font-bold text-on-surface">₹{(stats.advancePaymentsCollected || 0).toLocaleString()}</h3>
+                        <p className="text-xs text-slate-500 mt-1 font-medium italic">Instant Recovery Active</p>
+                    </div>
                 </div>
-                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm border-l-4 border-l-emerald-500">
-                    <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1 font-inter">RTO Saved</p>
-                    <h2 className="text-3xl font-black text-slate-900">₹{(stats.estimatedRtoSaved || 0).toLocaleString()}</h2>
-                    <p className="text-[10px] text-slate-400 font-bold mt-1 uppercase tracking-tighter">AI Prevention Layer</p>
+
+                <div className="glass-card p-6 rounded-2xl flex flex-col gap-4 border-l-2 border-secondary/40 hover:border-secondary transition-all group">
+                    <div className="flex justify-between items-start">
+                        <span className="text-secondary material-symbols-outlined">energy_savings_leaf</span>
+                        <span className="text-[10px] font-bold text-secondary/60 uppercase tracking-widest leading-none">REVENUE</span>
+                    </div>
+                    <div>
+                        <h3 className="text-3xl font-bold text-on-surface">₹{(stats.estimatedRtoSaved || 0).toLocaleString()}</h3>
+                        <p className="text-xs text-slate-500 mt-1 font-medium italic">AI Prevention Profit</p>
+                    </div>
                 </div>
             </section>
 
-            <div className="flex flex-col lg:grid lg:grid-cols-3 gap-8 w-full">
-                <div className="lg:col-span-2 space-y-8">
-                    <div id="tour-recent-activity" className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
-                        <div className="p-6 border-b border-slate-200 flex items-center justify-between">
-                            <h3 className="font-bold text-slate-900">Recent Activity</h3>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
+                <div className="lg:col-span-2 space-y-6">
+                    <div id="tour-recent-activity" className="space-y-6">
+                        <div className="flex justify-between items-end px-2">
+                            <h3 className="text-xl font-bold text-on-surface font-headline uppercase tracking-tight">Recent Activity</h3>
+                            <button className="text-primary text-xs font-black uppercase tracking-widest hover:underline decoration-2 underline-offset-4">Monitor Stream</button>
                         </div>
-                        <div className="overflow-x-auto w-full">
+                        
+                        <div className="overflow-hidden rounded-2xl bg-surface-container-low border border-outline-variant/5">
                             <table className="w-full text-left border-collapse whitespace-nowrap">
-                                <thead className="bg-slate-50">
-                                    <tr>
-                                        <th className="px-6 py-4 text-[10px] font-bold uppercase text-slate-500">Order</th>
-                                        <th className="px-6 py-4 text-[10px] font-bold uppercase text-slate-500">Amount</th>
-                                        <th className="px-6 py-4 text-[10px] font-bold uppercase text-slate-500">Risk</th>
-                                        <th className="px-6 py-4 text-right text-[10px] font-bold uppercase text-slate-500">Action</th>
+                                <thead>
+                                    <tr className="border-b border-outline-variant/10 bg-surface-container-high/30">
+                                        <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-500 tracking-widest">Order ID</th>
+                                        <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-500 tracking-widest">Amount</th>
+                                        <th className="px-6 py-4 text-[10px] font-black uppercase text-slate-500 tracking-widest">Risk Index</th>
+                                        <th className="px-6 py-4 text-right text-[10px] font-black uppercase text-slate-500 tracking-widest">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-100">
+                                <tbody className="divide-y divide-outline-variant/5">
                                     {stats.recentActivity && stats.recentActivity.length > 0 ? (
                                         stats.recentActivity.map(order => (
-                                            <tr key={order._id} className="hover:bg-slate-50 transition-colors">
+                                            <tr key={order._id} className="hover:bg-[#2e3447]/30 transition-colors group">
                                                 <td className="px-6 py-4">
-                                                    <span className="font-mono text-xs font-bold text-slate-900">#{order.orderNumber}</span>
-                                                    <p className="text-[10px] text-slate-400">{order.phone}</p>
+                                                    <span className="font-mono text-sm font-bold text-primary">#{order.orderNumber}</span>
+                                                    <p className="text-[10px] text-slate-500 mt-0.5">{order.phone}</p>
                                                 </td>
-                                                <td className="px-6 py-4 text-xs font-bold text-slate-700">₹{(order.totalPrice || 0).toFixed(2)}</td>
+                                                <td className="px-6 py-4 text-sm font-black text-on-surface">₹{(order.totalPrice || 0).toLocaleString()}</td>
                                                 <td className="px-6 py-4">
-                                                    <span className={`px-2 py-1 text-[10px] font-bold rounded-full uppercase ${
-                                                        order.riskLevel === 'CRITICAL' ? 'bg-rose-100 text-rose-700' :
-                                                        order.riskLevel === 'HIGH' ? 'bg-orange-100 text-orange-700' :
-                                                        'bg-emerald-100 text-emerald-700'
+                                                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter ${
+                                                        order.riskLevel === 'CRITICAL' ? 'bg-error/20 text-error' :
+                                                        order.riskLevel === 'HIGH' ? 'bg-orange-500/20 text-orange-400' :
+                                                        'bg-emerald-500/20 text-emerald-400'
                                                     }`}>{order.riskLevel}</span>
                                                 </td>
-                                                 <td className="px-6 py-4 text-right flex items-center justify-end gap-2">
-                                                    {order.paymentRequired && (
-                                                        <span className="material-symbols-outlined text-amber-500 text-sm" title={order.paymentStatus === 'paid' ? 'Partial Payment Received' : 'Awaiting Partial Payment'}>
-                                                            {order.paymentStatus === 'paid' ? 'check_circle' : 'pending'}
-                                                        </span>
-                                                    )}
-                                                    <button onClick={() => viewOrder(order._id)} className="text-xs font-bold text-indigo-600 hover:underline px-2 py-1">VIEW</button>
+                                                 <td className="px-6 py-4 text-right">
+                                                    <div className="flex items-center justify-end gap-3">
+                                                        {order.paymentRequired && (
+                                                            <span className={`material-symbols-outlined text-lg ${order.paymentStatus === 'paid' ? 'text-emerald-400' : 'text-amber-400 animate-pulse'}`} title={order.paymentStatus === 'paid' ? 'Secured' : 'Pending Verification'}>
+                                                                {order.paymentStatus === 'paid' ? 'verified' : 'hourglass_bottom'}
+                                                            </span>
+                                                        )}
+                                                        <button onClick={() => viewOrder(order._id)} className="p-2 rounded-xl bg-surface-container-highest opacity-0 group-hover:opacity-100 transition-all text-primary hover:bg-primary hover:text-on-primary">
+                                                            <span className="material-symbols-outlined text-lg">visibility</span>
+                                                        </button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         ))
                                     ) : (
-                                        <tr><td colSpan="4" className="px-6 py-8 text-center text-slate-400 text-xs font-medium italic">No recent activity detected.</td></tr>
+                                        <tr><td colSpan="4" className="px-6 py-12 text-center text-slate-500 text-xs font-bold uppercase tracking-widest italic opacity-40">Zero Inbound Signals</td></tr>
                                     )}
                                 </tbody>
                             </table>
@@ -258,32 +281,79 @@ export default function Dashboard() {
                 </div>
 
                 <div className="space-y-8">
-                    <div id="tour-held-orders" className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm h-full">
-                        <div className="flex items-center justify-between mb-6">
-                            <h3 className="font-bold text-slate-900">Held Orders</h3>
-                            <span className="bg-rose-500 text-white text-[10px] font-black px-2 py-0.5 rounded-md">{heldOrders.length}</span>
+                    <div id="tour-held-orders" className="glass-card p-6 rounded-2xl border border-outline-variant/10 shadow-xl flex flex-col h-full min-h-[400px]">
+                        <div className="flex items-center justify-between mb-8">
+                            <h3 className="text-xl font-bold text-on-surface font-headline uppercase leading-none">Security Hold</h3>
+                            <span className="bg-error text-on-error-container text-[10px] font-black px-2.5 py-1 rounded-lg shadow-sm">{heldOrders.length}</span>
                         </div>
-                        <div className="space-y-4">
+                        
+                        <div className="space-y-4 flex-grow">
                             {heldOrders.length === 0 ? (
-                                <div className="text-center py-10 opacity-40">
-                                    <span className="material-symbols-outlined text-4xl block mb-2">verified_user</span>
-                                    <p className="text-xs font-medium italic">All safe.</p>
+                                <div className="flex flex-col items-center justify-center text-center py-20 animate-in zoom-in duration-700">
+                                    <div className="w-20 h-20 rounded-full bg-emerald-500/10 flex items-center justify-center mb-4">
+                                        <span className="material-symbols-outlined text-4xl text-emerald-400" style={{fontVariationSettings: "'FILL' 1"}}>verified_user</span>
+                                    </div>
+                                    <h4 className="font-bold text-lg text-on-surface uppercase tracking-tighter">All Safe</h4>
+                                    <p className="text-xs text-slate-500 mt-1">No orders pending manual verification.</p>
                                 </div>
                             ) : (
                                 heldOrders.map(order => (
-                                    <div key={order._id} className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                                        <div className="flex justify-between mb-2">
-                                            <p className="font-mono text-[10px] font-bold text-slate-500">#{order.orderNumber}</p>
-                                            <p className="text-[10px] font-bold text-rose-600 uppercase">HOLD</p>
+                                    <div key={order._id} className="bg-[#2e3447]/40 p-5 rounded-2xl border border-outline-variant/10 group hover:border-primary/30 transition-all">
+                                        <div className="flex justify-between mb-4">
+                                            <div>
+                                                <p className="font-mono text-[10px] font-black text-slate-500 uppercase tracking-widest leading-none">#{order.orderNumber}</p>
+                                                <p className="text-[10px] font-bold text-error uppercase mt-1 leading-none tracking-tighter">Deterministic Block</p>
+                                            </div>
+                                            <span className="material-symbols-outlined text-error/30 group-hover:text-error transition-colors">shield_with_heart</span>
                                         </div>
-                                        <p className="text-sm font-black text-slate-900 mb-4">₹{(order.totalPrice || 0).toLocaleString()}</p>
+                                        <p className="text-2xl font-black text-on-surface mb-6 leading-none">₹{(order.totalPrice || 0).toLocaleString()}</p>
                                         <div className="flex gap-2">
-                                            <button onClick={() => handleRelease(order._id)} className="flex-1 py-2 bg-emerald-50 text-emerald-700 text-[10px] font-bold rounded-lg hover:bg-emerald-600 hover:text-white transition-all">RELEASE</button>
-                                            <button onClick={() => handleCancel(order._id)} className="flex-1 py-2 bg-rose-50 text-rose-700 text-[10px] font-bold rounded-lg hover:bg-rose-600 hover:text-white transition-all">CANCEL</button>
+                                            <button 
+                                                disabled={actionLoading === order._id + '-release'}
+                                                onClick={() => handleRelease(order._id)} 
+                                                className="flex-1 py-3 bg-emerald-500/10 text-emerald-400 text-[10px] font-black rounded-xl hover:bg-emerald-500 hover:text-white transition-all active:scale-95 disabled:opacity-50 uppercase tracking-widest"
+                                            >
+                                                {actionLoading === order._id + '-release' ? '...' : 'Release'}
+                                            </button>
+                                            <button 
+                                                disabled={actionLoading === order._id + '-cancel'}
+                                                onClick={() => handleCancel(order._id)} 
+                                                className="flex-1 py-3 bg-error/10 text-error text-[10px] font-black rounded-xl hover:bg-error hover:text-white transition-all active:scale-95 disabled:opacity-50 uppercase tracking-widest"
+                                            >
+                                                {actionLoading === order._id + '-cancel' ? '...' : 'Terminate'}
+                                            </button>
                                         </div>
                                     </div>
                                 ))
                             )}
+                        </div>
+
+                        {/* Payment Info / Quick Insights Panel from Stitch */}
+                        <div className="mt-8 pt-8 border-t border-outline-variant/10 space-y-6">
+                            <div className="flex justify-between items-center">
+                                <h4 className="font-bold text-sm text-on-surface flex items-center gap-2 uppercase tracking-tight">
+                                    <span className="material-symbols-outlined text-primary text-xl">receipt_long</span>
+                                    Node Status
+                                </h4>
+                                <span className="px-2 py-0.5 rounded-lg text-[9px] font-black bg-primary/20 text-primary uppercase tracking-widest">Active</span>
+                            </div>
+                            <div className="space-y-3">
+                                <div className="flex justify-between text-xs">
+                                    <span className="text-slate-500 font-medium">Uptime Index</span>
+                                    <span className="font-black text-emerald-400">99.98%</span>
+                                </div>
+                                <div className="flex justify-between text-xs">
+                                    <span className="text-slate-500 font-medium">Capture Rate</span>
+                                    <span className="font-black text-primary text-sm leading-none">84.2%</span>
+                                </div>
+                                <div className="flex justify-between text-xs items-center">
+                                    <span className="text-slate-500 font-medium">Detection Layer</span>
+                                    <span className="flex items-center gap-1.5 text-secondary font-black">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+                                        Neural
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -304,39 +374,42 @@ export default function Dashboard() {
             )}
 
             {isTestModalOpen && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
-                    <div id="tour-simulation-form" className="bg-white rounded-[24px] w-full max-w-md overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
-                        <div className="p-6 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
-                            <h2 className="text-xl font-black text-slate-900 uppercase">Create Test Order</h2>
-                            <button onClick={() => setIsTestModalOpen(false)} className="text-slate-400 hover:text-slate-600"><span className="material-symbols-outlined">close</span></button>
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-300">
+                    <div id="tour-simulation-form" className="bg-surface-container rounded-[32px] w-full max-w-md overflow-hidden shadow-2xl border border-outline-variant/10 animate-in zoom-in-95 duration-300">
+                        <div className="p-8 bg-[#2e3447]/40 border-b border-outline-variant/10 flex justify-between items-center">
+                            <div>
+                                <h2 className="text-xl font-black text-on-surface uppercase tracking-tight">Inject Signal</h2>
+                                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Order Simulation Node</p>
+                            </div>
+                            <button onClick={() => setIsTestModalOpen(false)} className="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container-highest text-slate-400 hover:text-white transition-colors"><span className="material-symbols-outlined">close</span></button>
                         </div>
-                        <form onSubmit={handleCreateTestOrder} className="p-6 space-y-4">
-                            <div className="space-y-1">
-                                <label className="text-[10px] font-bold uppercase text-slate-400">Phone</label>
-                                <input type="text" required value={testOrderData.phone} onChange={(e) => setTestOrderData({...testOrderData, phone: e.target.value})} className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-amber-500 outline-none" />
+                        <form onSubmit={handleCreateTestOrder} className="p-8 space-y-6">
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest ml-1">Phone Identification</label>
+                                <input type="text" required placeholder="+91 99999 99999" value={testOrderData.phone} onChange={(e) => setTestOrderData({...testOrderData, phone: e.target.value})} className="w-full px-5 py-3.5 bg-[#151b2d] border border-outline-variant/10 rounded-2xl focus:border-primary/50 text-on-surface outline-none transition-all placeholder:text-slate-600 font-mono text-sm" />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-1">
-                                    <label className="text-[10px] font-bold uppercase text-slate-400">Amount</label>
-                                    <input type="number" required value={testOrderData.totalPrice} onChange={(e) => setTestOrderData({...testOrderData, totalPrice: e.target.value})} className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-amber-500 outline-none" />
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest ml-1">Gross Amount (INR)</label>
+                                    <input type="number" required placeholder="0.00" value={testOrderData.totalPrice} onChange={(e) => setTestOrderData({...testOrderData, totalPrice: e.target.value})} className="w-full px-5 py-3.5 bg-[#151b2d] border border-outline-variant/10 rounded-2xl focus:border-primary/50 text-on-surface outline-none transition-all placeholder:text-slate-600 font-mono text-sm" />
                                 </div>
-                                <div className="flex items-center gap-2 pt-5">
-                                    <input type="checkbox" checked={testOrderData.isNewCustomer} onChange={(e) => setTestOrderData({...testOrderData, isNewCustomer: e.target.checked})} className="w-4 h-4" />
-                                    <label className="text-xs font-bold text-slate-600">New Customer</label>
+                                <div className="flex items-center gap-3 pt-6 pl-2">
+                                    <input id="new-customer-sim" type="checkbox" checked={testOrderData.isNewCustomer} onChange={(e) => setTestOrderData({...testOrderData, isNewCustomer: e.target.checked})} className="w-5 h-5 rounded-lg border-outline-variant/20 bg-[#151b2d] text-primary focus:ring-primary/20 transition-all cursor-pointer" />
+                                    <label htmlFor="new-customer-sim" className="text-xs font-bold text-slate-400 cursor-pointer select-none">New Entry</label>
                                 </div>
                             </div>
                             <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-1">
-                                    <label className="text-[10px] font-bold uppercase text-slate-400">Shipping City</label>
-                                    <input type="text" required value={testOrderData.shippingCity} onChange={(e) => setTestOrderData({...testOrderData, shippingCity: e.target.value})} className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-amber-500 outline-none" />
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest ml-1">Shipping Node</label>
+                                    <input type="text" required placeholder="City" value={testOrderData.shippingCity} onChange={(e) => setTestOrderData({...testOrderData, shippingCity: e.target.value})} className="w-full px-5 py-3.5 bg-[#151b2d] border border-outline-variant/10 rounded-2xl focus:border-primary/50 text-on-surface outline-none transition-all placeholder:text-slate-600 text-sm" />
                                 </div>
-                                <div className="space-y-1">
-                                    <label className="text-[10px] font-bold uppercase text-slate-400">Billing City</label>
-                                    <input type="text" required value={testOrderData.billingCity} onChange={(e) => setTestOrderData({...testOrderData, billingCity: e.target.value})} className="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:border-amber-500 outline-none" />
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest ml-1">Billing Node</label>
+                                    <input type="text" required placeholder="City" value={testOrderData.billingCity} onChange={(e) => setTestOrderData({...testOrderData, billingCity: e.target.value})} className="w-full px-5 py-3.5 bg-[#151b2d] border border-outline-variant/10 rounded-2xl focus:border-primary/50 text-on-surface outline-none transition-all placeholder:text-slate-600 text-sm" />
                                 </div>
                             </div>
-                            <button id="tour-inject-btn" type="submit" disabled={actionLoading === 'create-test'} className="w-full py-3 bg-slate-900 hover:bg-black text-white rounded-xl font-bold uppercase text-xs transition-all shadow-lg active:scale-95 disabled:opacity-50">
-                                {actionLoading === 'create-test' ? 'Injecting...' : 'Inject Test Order'}
+                            <button id="tour-inject-btn" type="submit" disabled={actionLoading === 'create-test'} className="w-full py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary-fixed rounded-2xl font-black uppercase text-xs transition-all shadow-[0_0_20px_rgba(208,188,255,0.2)] active:scale-95 disabled:opacity-50 tracking-widest mt-4">
+                                {actionLoading === 'create-test' ? 'Transmitting...' : 'Inject Test Signal'}
                             </button>
                         </form>
                     </div>

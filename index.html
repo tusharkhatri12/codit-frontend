@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="light">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
@@ -16,74 +16,77 @@
         theme: {
           extend: {
             colors: {
-              "background": "#f5f7f9",
-              "on-surface": "#2c2f31",
-              "surface-bright": "#f5f7f9",
-              "on-tertiary-fixed": "#3b002b",
-              "error": "#b41340",
-              "outline": "#747779",
-              "surface-container": "#e5e9eb",
-              "secondary-fixed": "#dac9ff",
-              "surface-dim": "#d0d5d8",
-              "secondary-dim": "#5e26c7",
-              "primary-container": "#9396ff",
-              "surface-tint": "#4647d3",
-              "on-secondary-fixed-variant": "#5f28c8",
-              "on-secondary": "#f8f0ff",
-              "on-error-container": "#510017",
-              "primary": "#4647d3",
-              "on-primary-container": "#0a0081",
-              "inverse-on-surface": "#9a9d9f",
-              "on-surface-variant": "#595c5e",
-              "inverse-primary": "#8083ff",
-              "surface-container-lowest": "#ffffff",
-              "on-tertiary-container": "#63054a",
-              "tertiary": "#963776",
-              "on-primary": "#f4f1ff",
-              "secondary": "#6a37d4",
-              "on-primary-fixed": "#000000",
-              "secondary-fixed-dim": "#ceb9ff",
-              "tertiary-dim": "#882a69",
-              "surface-container-high": "#dfe3e6",
-              "error-container": "#f74b6d",
-              "surface-variant": "#d9dde0",
-              "on-background": "#2c2f31",
-              "tertiary-container": "#ff8ed2",
-              "on-error": "#ffefef",
-              "tertiary-fixed": "#ff8ed2",
-              "primary-fixed": "#9396ff",
-              "primary-dim": "#3939c7",
-              "tertiary-fixed-dim": "#ef81c4",
-              "secondary-container": "#dac9ff",
-              "surface-container-low": "#eef1f3",
-              "surface-container-highest": "#d9dde0",
-              "on-primary-fixed-variant": "#0e009d",
-              "on-tertiary-fixed-variant": "#6e1354",
-              "on-secondary-container": "#5517bf",
-              "primary-fixed-dim": "#8387ff",
-              "error-dim": "#a70138",
-              "inverse-surface": "#0b0f10",
-              "on-secondary-fixed": "#40009b",
-              "outline-variant": "#abadaf",
-              "on-tertiary": "#ffeef4",
-              "surface": "#f5f7f9"
+              "on-secondary": "#2d2a5b",
+              "surface-container-lowest": "#070d1f",
+              "on-secondary-fixed": "#181445",
+              "on-secondary-container": "#b3afe9",
+              "on-tertiary-fixed-variant": "#703700",
+              "primary-container": "#a078ff",
+              "tertiary-fixed": "#ffdcc5",
+              "on-error-container": "#ffdad6",
+              "tertiary": "#ffb783",
+              "surface-dim": "#0c1324",
+              "on-primary-fixed": "#23005c",
+              "error-container": "#93000a",
+              "surface-tint": "#d0bcff",
+              "on-tertiary-container": "#452000",
+              "on-secondary-fixed-variant": "#444173",
+              "inverse-primary": "#6d3bd7",
+              "error": "#ffb4ab",
+              "secondary-fixed": "#e3dfff",
+              "surface-container": "#191f31",
+              "surface": "#0c1324",
+              "surface-variant": "#2e3447",
+              "outline": "#908fa0",
+              "inverse-on-surface": "#2a3043",
+              "on-primary": "#3c0091",
+              "surface-container-high": "#23293c",
+              "surface-bright": "#33394c",
+              "surface-container-low": "#151b2d",
+              "surface-container-highest": "#2e3447",
+              "secondary": "#c4c1fb",
+              "on-error": "#690005",
+              "on-primary-fixed-variant": "#5516be",
+              "inverse-surface": "#dce1fb",
+              "on-surface": "#dce1fb",
+              "secondary-container": "#444173",
+              "on-surface-variant": "#c7c4d7",
+              "background": "#0c1324",
+              "on-background": "#dce1fb",
+              "primary-fixed": "#e9ddff",
+              "primary-fixed-dim": "#d0bcff",
+              "on-tertiary-fixed": "#301400",
+              "primary": "#d0bcff",
+              "tertiary-container": "#d97721",
+              "on-primary-container": "#340080",
+              "secondary-fixed-dim": "#c4c1fb",
+              "outline-variant": "#464554",
+              "tertiary-fixed-dim": "#ffb783",
+              "on-tertiary": "#4f2500"
             },
             fontFamily: {
-              "headline": ["Inter"],
+              "headline": ["Manrope"],
               "body": ["Inter"],
               "label": ["Inter"]
             },
-            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1.5rem", "full": "9999px"},
           },
         },
       }
     </script>
     <style type="text/tailwindcss">
-        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; background-color: #f5f7f9; }
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; background-color: #0c1324; color: #dce1fb; }
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
         .gradient-text { @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent; }
         .gradient-button { @apply bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:opacity-90 transition-all active:scale-95; }
-        .glass-card { @apply bg-white/80 backdrop-blur-xl border border-white/20; }
+        .glass-card { 
+            background: rgba(46, 52, 71, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(208, 188, 255, 0.05);
+        }
+        .purple-glow {
+            box-shadow: 0 0 20px rgba(208, 188, 255, 0.08);
+        }
         .editorial-shadow { box-shadow: 0px 4px 24px rgba(44, 47, 49, 0.04), 0px 2px 8px rgba(44, 47, 49, 0.06); }
         .signature-gradient { background: linear-gradient(135deg, #4647d3 0%, #6a37d4 100%); }
         .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(24px); }

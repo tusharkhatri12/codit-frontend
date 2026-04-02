@@ -24,7 +24,6 @@ export default function OrderDetailsModal({ order: initialOrder, onClose, loadin
                 setOrder(data.data);
                 // Trigger parent refresh if provided
                 if (onOrderUpdate) onOrderUpdate(data.data);
-                // We don't close the modal, let user see the outcome
             } else {
                 alert('Simulation failed');
             }
@@ -35,316 +34,255 @@ export default function OrderDetailsModal({ order: initialOrder, onClose, loadin
         }
     };
 
-    const getRiskColor = (level) => {
-        if (level === 'CRITICAL') return { bg: '#fef2f2', text: '#b91c1c', badge: '#fee2e2', border: '#fca5a5' };
-        if (level === 'HIGH') return { bg: '#fff7ed', text: '#c2410c', badge: '#ffedd5', border: '#fdba74' };
-        if (level === 'MEDIUM') return { bg: '#fffbeb', text: '#b45309', badge: '#fef3c7', border: '#fcd34d' };
-        return { bg: '#f0fdf4', text: '#15803d', badge: '#dcfce7', border: '#86efac' };
+    const getRiskColorClasses = (level) => {
+        if (level === 'CRITICAL') return 'bg-error/10 text-error border-error/20';
+        if (level === 'HIGH') return 'bg-orange-500/10 text-orange-400 border-orange-500/20';
+        if (level === 'MEDIUM') return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
+        return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
     };
-
-    const getRecommendationStyle = (rec) => {
-        if (rec === 'Cancel') return { background: '#fef2f2', color: '#b91c1c', border: '1px solid #fca5a5' };
-        if (rec === 'Review') return { background: '#fffbeb', color: '#b45309', border: '1px solid #fcd34d' };
-        return { background: '#f0fdf4', color: '#15803d', border: '1px solid #86efac' };
-    };
-
-    const riskColors = order ? getRiskColor(order.riskLevel) : {};
 
     return (
-        <div style={styles.overlay} onClick={onClose}>
-            <div style={styles.modal} onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-xl animate-in fade-in duration-300" onClick={onClose}>
+            <div className="bg-[#151b2d] border border-outline-variant/10 rounded-[32px] w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl animate-in zoom-in-95 duration-300 scrollbar-v" onClick={e => e.stopPropagation()}>
                 {loading ? (
-                    <div style={styles.loadingContainer}>
-                        <span className="material-symbols-outlined" style={{ fontSize: 48, color: '#6366f1', animation: 'spin 1s linear infinite' }}>hourglass_top</span>
-                        <p style={{ color: '#64748b', fontWeight: 600, marginTop: 16 }}>Analyzing order intelligence...</p>
+                    <div className="p-20 flex flex-col items-center justify-center space-y-6">
+                        <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+                        <p className="text-slate-400 font-black uppercase tracking-widest text-[10px]">Neural Processing...</p>
                     </div>
                 ) : order && (
                     <>
                         {/* Header */}
-                        <div style={styles.header}>
+                        <div className="p-8 border-b border-outline-variant/5 flex justify-between items-center bg-[#2e3447]/20">
                             <div>
-                                <p style={styles.headerLabel}>ORDER INTELLIGENCE</p>
-                                <h2 style={styles.headerTitle}>#{order.orderId}</h2>
+                                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Order Intelligence</p>
+                                <h2 className="text-2xl font-black text-on-surface uppercase tracking-tight">#{order.orderId || order.orderNumber}</h2>
                             </div>
-                            <button id="tour-close-modal-btn" onClick={onClose} style={styles.closeBtn}>
+                            <button id="tour-close-modal-btn" onClick={onClose} className="p-3 rounded-2xl bg-surface-container-highest text-slate-400 hover:text-white transition-all">
                                 <span className="material-symbols-outlined">close</span>
                             </button>
                         </div>
 
-                        {/* Order Overview */}
-                        <div style={styles.section}>
-                            <div style={styles.grid4}>
-                                <div style={styles.infoCell}>
-                                    <p style={styles.label}>AMOUNT</p>
-                                    <p style={styles.valueXl}>₹{(order.totalPrice || 0).toLocaleString()}</p>
-                                </div>
-                                <div style={styles.infoCell}>
-                                    <p style={styles.label}>STATUS</p>
-                                    <span style={{
-                                        ...styles.badge,
-                                        background: 
-                                            order.orderStatus === 'canceled' ? '#fee2e2' : 
-                                            order.orderStatus === 'confirmed' ? '#dcfce7' : 
-                                            order.orderStatus === 'pending_review' ? '#fef3c7' :
-                                            order.orderStatus === 'held' ? '#ffedd5' :
-                                            '#f1f5f9',
-                                        color: 
-                                            order.orderStatus === 'canceled' ? '#b91c1c' : 
-                                            order.orderStatus === 'confirmed' ? '#15803d' : 
-                                            order.orderStatus === 'pending_review' ? '#b45309' :
-                                            order.orderStatus === 'held' ? '#c2410c' :
-                                            '#475569'
-                                    }}>{(order.orderStatus || 'new').replace('_', ' ').toUpperCase()}</span>
-                                </div>
-                                <div style={styles.infoCell}>
-                                    <p style={styles.label}>PHONE</p>
-                                    <p style={styles.value}>{order.phone}</p>
-                                </div>
-                                <div style={styles.infoCell}>
-                                    <p style={styles.label}>WHATSAPP</p>
-                                    <span style={{ ...styles.badge, background: '#f1f5f9', color: '#475569' }}>
-                                        {(order.whatsappStatus || 'pending').toUpperCase()}
-                                    </span>
-                                </div>
+                        {/* Order Overview Grid */}
+                        <div className="p-8 grid grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div className="space-y-1">
+                                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Gross Amount</p>
+                                <p className="text-xl font-black text-on-surface">₹{(order.totalPrice || 0).toLocaleString()}</p>
+                            </div>
+                            <div className="space-y-1">
+                                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Node Status</p>
+                                <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter ${
+                                    order.orderStatus === 'canceled' ? 'bg-error/20 text-error' : 
+                                    order.orderStatus === 'confirmed' ? 'bg-emerald-500/20 text-emerald-400' : 
+                                    order.orderStatus === 'held' ? 'bg-orange-500/20 text-orange-400' :
+                                    'bg-slate-500/20 text-slate-400'
+                                }`}>{(order.orderStatus || 'new').replace('_', ' ')}</span>
+                            </div>
+                            <div className="space-y-1">
+                                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Comm Link</p>
+                                <span className="inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter bg-surface-container-highest text-slate-400">
+                                    {(order.whatsappStatus || 'pending')}
+                                </span>
                             </div>
                         </div>
 
-                        {/* Partial Payment Info */}
+                        {/* Partial Payment Securing */}
                         {order.paymentRequired && (
-                            <div style={{ ...styles.section, borderBottom: '1px solid #f1f5f9', background: order.paymentStatus === 'paid' ? '#f0fdf4' : '#fffbeb' }}>
-                                <div style={styles.sectionHeader}>
-                                    <span className="material-symbols-outlined" style={{ color: order.paymentStatus === 'paid' ? '#15803d' : '#b45309', fontSize: 20 }}>payments</span>
-                                    <h3 style={styles.sectionTitle}>Partial Payment Info</h3>
-                                    <span style={{ 
-                                        ...styles.badge, 
-                                        background: order.paymentStatus === 'paid' ? '#dcfce7' : '#fef3c7', 
-                                        color: order.paymentStatus === 'paid' ? '#15803d' : '#b45309',
-                                        marginLeft: 'auto'
-                                    }}>
-                                        {order.paymentStatus?.toUpperCase()}
-                                    </span>
+                            <div className={`mx-8 p-6 rounded-2xl border mb-6 transition-all ${order.paymentStatus === 'paid' ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-amber-500/5 border-amber-500/20'}`}>
+                                <div className="flex items-center gap-3 mb-6">
+                                    <span className={`material-symbols-outlined ${order.paymentStatus === 'paid' ? 'text-emerald-400' : 'text-amber-400'}`}>payments</span>
+                                    <h3 className="text-xs font-black text-on-surface uppercase tracking-widest">Asset Securing</h3>
+                                    <span className={`ml-auto px-2.5 py-1 rounded-lg text-[9px] font-black uppercase ${
+                                        order.paymentStatus === 'paid' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-amber-500/20 text-amber-400'
+                                    }`}>{order.paymentStatus}</span>
                                 </div>
-                                <div style={styles.grid4}>
-                                    <div style={styles.infoCell}>
-                                        <p style={styles.label}>ADVANCE AMOUNT</p>
-                                        <p style={styles.valueXl}>₹{(order.paymentAmount || 100).toLocaleString()}</p>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Target Amount</p>
+                                        <p className="text-lg font-black text-on-surface leading-none">₹{(order.paymentAmount || 100).toLocaleString()}</p>
                                     </div>
-                                    <div style={styles.infoCell}>
-                                        <p style={styles.label}>PAYMENT LINK</p>
-                                        <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 4 }}>
-                                            <button 
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    if (order.paymentLink) {
-                                                        navigator.clipboard.writeText(order.paymentLink);
-                                                        alert('Payment link copied!');
-                                                    }
-                                                }}
-                                                style={{ 
-                                                    ...styles.simulateBtn, 
-                                                    maxWidth: 100, 
-                                                    padding: '6px 8px', 
-                                                    background: '#6366f1',
-                                                    fontSize: 9,
-                                                    margin: 0
-                                                }}
-                                            >
-                                                COPY LINK
-                                            </button>
-                                            {order.paymentStatus === 'pending' && order.paymentLink && (
-                                                <a href={order.paymentLink} target="_blank" rel="noreferrer" style={{ fontSize: 10, color: '#6366f1', textDecoration: 'underline', fontWeight: 700 }}>TEST LINK</a>
-                                            )}
-                                        </div>
+                                    <div className="flex flex-col justify-end items-end">
+                                        <button 
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                if (order.paymentLink) {
+                                                    navigator.clipboard.writeText(order.paymentLink);
+                                                    alert('Payment link copied!');
+                                                }
+                                            }}
+                                            className="px-4 py-2 bg-primary text-on-primary-fixed text-[9px] font-black rounded-xl hover:opacity-90 transition-all uppercase tracking-widest"
+                                        >
+                                            Copy Link
+                                        </button>
+                                        {order.paymentStatus === 'pending' && order.paymentLink && (
+                                            <a href={order.paymentLink} target="_blank" rel="noreferrer" className="text-[9px] font-black text-primary mt-2 uppercase tracking-widest hover:underline underline-offset-4 decoration-2">Inspect Link</a>
+                                        )}
                                     </div>
                                 </div>
                             </div>
                         )}
 
-                        {/* Risk Analysis */}
-                        <div style={{ ...styles.section, borderBottom: '1px solid #f1f5f9' }}>
-                            <div style={styles.sectionHeader}>
-                                <span className="material-symbols-outlined" style={{ color: riskColors.text, fontSize: 20 }}>shield</span>
-                                <h3 style={styles.sectionTitle}>Risk Analysis</h3>
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
-                                <div style={{
-                                    width: 64, height: 64, borderRadius: 16,
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    fontSize: 24, fontWeight: 900, color: '#fff',
-                                    background: order.riskScore >= 70 ? '#ef4444' : order.riskScore >= 40 ? '#f97316' : '#22c55e',
-                                    boxShadow: `0 4px 12px ${order.riskScore >= 70 ? 'rgba(239,68,68,0.3)' : order.riskScore >= 40 ? 'rgba(249,115,22,0.3)' : 'rgba(34,197,94,0.3)'}`
-                                }}>
-                                    {order.riskScore}
+                        {/* Risk Intelligence Section */}
+                        <div className="px-8 pb-8 space-y-6">
+                            <div className="p-6 glass-card rounded-3xl border border-outline-variant/10">
+                                <div className="flex items-center gap-3 mb-6">
+                                    <span className="material-symbols-outlined text-primary">security</span>
+                                    <h3 className="text-xs font-black text-on-surface uppercase tracking-widest">Risk Intelligence</h3>
                                 </div>
-                                <div>
-                                    <span style={{
-                                        ...styles.badge,
-                                        background: riskColors.badge,
-                                        color: riskColors.text,
-                                        border: `1px solid ${riskColors.border}`
-                                    }}>{order.riskLevel}</span>
-                                    <p style={{ color: '#94a3b8', fontSize: 12, marginTop: 4 }}>Weighted score (0–100)</p>
+                                
+                                <div className="flex items-center gap-6 mb-8">
+                                    <div className={`w-20 h-20 rounded-2xl flex flex-col items-center justify-center font-black text-2xl shadow-lg transition-all ${
+                                        order.riskScore >= 70 ? 'bg-error text-on-error shadow-error/20' : 
+                                        order.riskScore >= 40 ? 'bg-orange-500 text-white shadow-orange-500/20' : 
+                                        'bg-emerald-500 text-white shadow-emerald-500/20'
+                                    }`}>
+                                        {order.riskScore}
+                                        <span className="text-[8px] opacity-70 leading-none mt-1">INDEX</span>
+                                    </div>
+                                    <div className="space-y-1.5">
+                                        <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase border tracking-tighter ${getRiskColorClasses(order.riskLevel)}`}>
+                                            {order.riskLevel}
+                                        </span>
+                                        <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Neural Score (0-100)</p>
+                                    </div>
+                                </div>
+
+                                {order.riskReasons && order.riskReasons.length > 0 && (
+                                    <div className="space-y-3">
+                                        {order.riskReasons.map((reason, i) => (
+                                            <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-surface-container-low/50 border border-outline-variant/5 group hover:border-primary/20 transition-all">
+                                                <span className="material-symbols-outlined text-primary text-sm mt-0.5">radar</span>
+                                                <span className="text-xs font-medium text-slate-300 leading-relaxed">{reason}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Customer historical profile */}
+                            <div className="grid grid-cols-3 gap-3">
+                                <div className="p-4 rounded-2xl bg-surface-container-high/30 border border-outline-variant/5 text-center transition-all hover:bg-surface-container-high/50">
+                                    <p className="text-xl font-black text-on-surface">{order.customerStats?.totalOrders || 0}</p>
+                                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-1">Total</p>
+                                </div>
+                                <div className="p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/10 text-center transition-all hover:bg-emerald-500/10">
+                                    <p className="text-xl font-black text-emerald-400">{order.customerStats?.confirmedOrders || 0}</p>
+                                    <p className="text-[9px] font-black text-emerald-500 uppercase tracking-widest mt-1">Verified</p>
+                                </div>
+                                <div className="p-4 rounded-2xl bg-error/5 border border-error/10 text-center transition-all hover:bg-error/10">
+                                    <p className="text-xl font-black text-error">{order.customerStats?.canceledOrders || 0}</p>
+                                    <p className="text-[9px] font-black text-error/60 uppercase tracking-widest mt-1">Aborted</p>
                                 </div>
                             </div>
-                            {order.riskReasons && order.riskReasons.length > 0 && (
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                                    {order.riskReasons.map((reason, i) => (
-                                        <div key={i} style={styles.reasonRow}>
-                                            <span className="material-symbols-outlined" style={{ fontSize: 14, color: riskColors.text, marginTop: 2 }}>report</span>
-                                            <span style={{ fontSize: 13, color: '#475569' }}>{reason}</span>
+
+                            {/* WhatsApp Lifecycle */}
+                            <div id="tour-whatsapp-section" className="p-6 rounded-3xl bg-primary/5 border border-primary/10 relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-all">
+                                    <span className="material-symbols-outlined text-6xl text-primary">chat_bubble</span>
+                                </div>
+                                
+                                <div className="flex items-center gap-3 mb-6">
+                                    <span className="material-symbols-outlined text-primary">forum</span>
+                                    <h3 className="text-xs font-black text-on-surface uppercase tracking-widest">Comm Interaction</h3>
+                                    <span className="ml-auto px-2 py-0.5 bg-primary/20 text-primary text-[8px] font-black uppercase tracking-widest rounded">Simulation</span>
+                                </div>
+                                
+                                <div className="bg-[#151b2d] rounded-2xl p-5 border border-outline-variant/10 mb-6 relative shadow-inner">
+                                    <p className="text-xs font-medium text-slate-300 leading-relaxed italic">
+                                        "{order.whatsappMessage || `Hi! Please confirm your COD order of ₹${(order.totalPrice || 0).toLocaleString()}. Reply YES to confirm or NO to cancel.`}"
+                                    </p>
+                                    <div className="flex justify-between items-center mt-4">
+                                        <div className="flex gap-1.5">
+                                            <span className="w-1 h-1 rounded-full bg-primary animate-pulse"></span>
+                                            <span className="w-1 h-1 rounded-full bg-primary animate-pulse delay-75"></span>
+                                            <span className="w-1 h-1 rounded-full bg-primary animate-pulse delay-150"></span>
                                         </div>
-                                    ))}
+                                        <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest">
+                                            {order.whatsappStatus === 'sent' ? 'Intercept Link Active' : `State: ${order.whatsappStatus}`}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {order.whatsappStatus === 'sent' ? (
+                                    <div className="flex gap-3">
+                                        <button 
+                                            id="tour-simulate-yes"
+                                            onClick={() => handleSimulateReply('YES')}
+                                            disabled={simulating}
+                                            className="flex-1 py-4 bg-emerald-500/10 text-emerald-400 text-[10px] font-black rounded-2xl border border-emerald-500/20 hover:bg-emerald-500 hover:text-white transition-all active:scale-95 disabled:opacity-50 uppercase tracking-widest"
+                                        >
+                                            {simulating === 'YES' ? '...' : 'Signal YES'}
+                                        </button>
+                                        <button 
+                                            onClick={() => handleSimulateReply('NO')}
+                                            disabled={simulating}
+                                            className="flex-1 py-4 bg-error/10 text-error text-[10px] font-black rounded-2xl border border-error/20 hover:bg-error hover:text-white transition-all active:scale-95 disabled:opacity-50 uppercase tracking-widest"
+                                        >
+                                            {simulating === 'NO' ? '...' : 'Signal NO'}
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="flex items-center gap-4 p-4 bg-[#151b2d] rounded-2xl border border-outline-variant/10">
+                                        <div className={`p-2 rounded-full ${order.whatsappStatus === 'confirmed' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-error/20 text-error'}`}>
+                                            <span className="material-symbols-outlined text-lg">
+                                                {order.whatsappStatus === 'confirmed' ? 'verified' : 'cancel'}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <p className="text-[10px] font-black text-on-surface uppercase tracking-tight">Signal Received</p>
+                                            <p className="text-xs font-bold text-slate-400 mt-0.5">
+                                                User transmitted <span className={order.whatsappStatus === 'confirmed' ? 'text-emerald-400' : 'text-error'}>{order.whatsappStatus === 'confirmed' ? 'YES' : 'NO'}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Final Decision Protocol */}
+                            {(order.finalDecision || order.decisionReason) && (
+                                <div className={`p-6 rounded-3xl border transition-all ${
+                                    order.finalDecision === 'hold' ? 'bg-error/5 border-error/20' : 
+                                    order.finalDecision === 'manual_review' ? 'bg-orange-500/5 border-orange-500/20' : 
+                                    'bg-primary/5 border-primary/20'
+                                }`}>
+                                    <div className="flex items-center gap-3 mb-6">
+                                        <span className={`material-symbols-outlined ${
+                                            order.finalDecision === 'auto_confirm' ? 'text-emerald-400' : 
+                                            order.finalDecision === 'manual_review' ? 'text-orange-400' :
+                                            'text-error'
+                                        }`}>
+                                            {order.finalDecision === 'auto_confirm' ? 'verified_user' : 
+                                             order.finalDecision === 'manual_review' ? 'rate_review' :
+                                             'pan_tool_alt'}
+                                        </span>
+                                        <h3 className="text-xs font-black text-on-surface uppercase tracking-widest">Final Decision Protocol</h3>
+                                    </div>
+                                    <div className="space-y-4">
+                                        <span className={`inline-block px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest ${
+                                            order.finalDecision === 'auto_confirm' ? 'bg-emerald-500/20 text-emerald-400' : 
+                                            order.finalDecision === 'manual_review' ? 'bg-orange-500/20 text-orange-400' :
+                                            'bg-error/20 text-error'
+                                        }`}>
+                                            {(order.finalDecision || 'pending').replace('_', ' ')}
+                                        </span>
+                                        <p className="text-slate-300 text-xs font-medium leading-relaxed italic">
+                                            "{order.decisionReason || 'Waiting for customer activity or analysis...'}"
+                                        </p>
+                                    </div>
                                 </div>
                             )}
-                        </div>
 
-                        {/* Customer History */}
-                        <div style={{ ...styles.section, borderBottom: '1px solid #f1f5f9' }}>
-                            <div style={styles.sectionHeader}>
-                                <span className="material-symbols-outlined" style={{ color: '#6366f1', fontSize: 20 }}>person_search</span>
-                                <h3 style={styles.sectionTitle}>Customer History</h3>
-                            </div>
-                            <div style={styles.grid3}>
-                                <div style={{ ...styles.statBox, background: '#f8fafc', border: '1px solid #e2e8f0' }}>
-                                    <p style={{ fontSize: 24, fontWeight: 900, color: '#0f172a' }}>{order.customerStats?.totalOrders || 0}</p>
-                                    <p style={{ fontSize: 10, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 1 }}>Total</p>
+                            {/* AI Prediction Hub */}
+                            <div className="pt-6 border-t border-outline-variant/10">
+                                <div className="p-8 rounded-[32px] bg-gradient-to-br from-primary to-primary-container text-center shadow-xl shadow-primary/20">
+                                    <p className="text-[10px] font-black text-on-primary-fixed/60 uppercase tracking-[0.2em] mb-3">AI Prediction Output</p>
+                                    <h4 className="text-3xl font-black text-on-primary-fixed uppercase tracking-tighter leading-none mb-1">
+                                        {order.recommendation}
+                                    </h4>
+                                    <div className="flex justify-center items-center gap-2 mt-4">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-on-primary-fixed/80"></span>
+                                        <p className="text-[10px] font-black text-on-primary-fixed/80 uppercase tracking-widest">Confidence: {order.riskScore < 30 ? 'High' : order.riskScore > 70 ? 'Extreme' : 'Nominal'}</p>
+                                    </div>
                                 </div>
-                                <div style={{ ...styles.statBox, background: '#f0fdf4', border: '1px solid #bbf7d0' }}>
-                                    <p style={{ fontSize: 24, fontWeight: 900, color: '#15803d' }}>{order.customerStats?.confirmedOrders || 0}</p>
-                                    <p style={{ fontSize: 10, fontWeight: 700, color: '#4ade80', textTransform: 'uppercase', letterSpacing: 1 }}>Confirmed</p>
-                                </div>
-                                <div style={{ ...styles.statBox, background: '#fef2f2', border: '1px solid #fecaca' }}>
-                                    <p style={{ fontSize: 24, fontWeight: 900, color: '#b91c1c' }}>{order.customerStats?.canceledOrders || 0}</p>
-                                    <p style={{ fontSize: 10, fontWeight: 700, color: '#f87171', textTransform: 'uppercase', letterSpacing: 1 }}>Canceled</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Fraud Signals */}
-                        {order.fraudSignals && order.fraudSignals.length > 0 && (
-                            <div style={{ ...styles.section, borderBottom: '1px solid #f1f5f9' }}>
-                                <div style={styles.sectionHeader}>
-                                    <span className="material-symbols-outlined" style={{ color: '#f97316', fontSize: 20 }}>warning</span>
-                                    <h3 style={styles.sectionTitle}>Fraud Signals</h3>
-                                    <span style={{ ...styles.badge, background: '#fff7ed', color: '#c2410c', marginLeft: 'auto' }}>{order.fraudSignals.length}</span>
-                                </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                                    {order.fraudSignals.map((signal, i) => (
-                                        <div key={i} style={styles.signalRow}>
-                                            <span className="material-symbols-outlined" style={{ fontSize: 16, color: '#f97316', flexShrink: 0 }}>error</span>
-                                            <p style={{ fontSize: 13, fontWeight: 500, color: '#9a3412' }}>{signal}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* WhatsApp Simulation Lifecycle */}
-                        <div id="tour-whatsapp-section" style={{ ...styles.section, borderBottom: '1px solid #f1f5f9', background: '#f0f9ff' }}>
-                            <div style={styles.sectionHeader}>
-                                <span className="material-symbols-outlined" style={{ color: '#0ea5e9', fontSize: 20 }}>chat_bubble</span>
-                                <h3 style={styles.sectionTitle}>WhatsApp Lifecycle (SIMULATION)</h3>
-                                <span style={{ ...styles.badge, background: '#e0f2fe', color: '#0369a1', marginLeft: 'auto' }}>DEMO</span>
-                            </div>
-                            
-                            <div style={{ background: '#fff', borderRadius: '12px 12px 12px 2px', padding: 12, border: '1px solid #e0f2fe', marginBottom: 16, maxWidth: '90%', position: 'relative', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
-                                <p style={{ fontSize: 13, color: '#0f172a', margin: 0, lineHeight: 1.5 }}>
-                                    {order.whatsappMessage || `Hi! Please confirm your COD order of ₹${(order.totalPrice || 0).toLocaleString()}. Reply YES to confirm or NO to cancel.`}
-                                </p>
-                                <p style={{ fontSize: 9, fontWeight: 700, color: '#94a3b8', marginTop: 4, textAlign: 'right', textTransform: 'uppercase' }}>
-                                    {order.whatsappStatus === 'sent' ? 'Sent just now' : `Status: ${order.whatsappStatus}`}
-                                </p>
-                            </div>
-
-                            {order.whatsappStatus === 'sent' ? (
-                                <div style={{ display: 'flex', gap: 10 }}>
-                                    <button 
-                                        id="tour-simulate-yes"
-                                        onClick={() => handleSimulateReply('YES')}
-                                        disabled={simulating}
-                                        style={{ ...styles.simulateBtn, background: '#10b981' }}
-                                    >
-                                        {simulating === 'YES' ? '...' : 'CONFIRM (YES)'}
-                                    </button>
-                                    <button 
-                                        onClick={() => handleSimulateReply('NO')}
-                                        disabled={simulating}
-                                        style={{ ...styles.simulateBtn, background: '#f43f5e' }}
-                                    >
-                                        {simulating === 'NO' ? '...' : 'REJECT (NO)'}
-                                    </button>
-                                </div>
-                            ) : (
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px', background: '#fff', borderRadius: 10, border: '1px solid #e0f2fe' }}>
-                                    <span className="material-symbols-outlined" style={{ color: order.whatsappStatus === 'confirmed' ? '#10b981' : '#f43f5e', fontSize: 18 }}>
-                                        {order.whatsappStatus === 'confirmed' ? 'check_circle' : 'cancel'}
-                                    </span>
-                                    <p style={{ fontSize: 12, fontWeight: 600, color: '#475569', margin: 0 }}>
-                                        User replied <span style={{ color: order.whatsappStatus === 'confirmed' ? '#10b981' : '#f43f5e' }}>{order.whatsappStatus === 'confirmed' ? 'YES' : 'NO'}</span>. Flow complete.
-                                    </p>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Final Decision */}
-                        {(order.finalDecision || order.decisionReason) && (
-                            <div style={{ ...styles.section, borderBottom: '1px solid #f1f5f9', background: order.finalDecision === 'hold' ? '#fff1f2' : order.finalDecision === 'manual_review' ? '#fffbeb' : '#f8fafc' }}>
-                                <div style={styles.sectionHeader}>
-                                    <span className="material-symbols-outlined" style={{ 
-                                        color: order.finalDecision === 'auto_confirm' ? '#15803d' : 
-                                               order.finalDecision === 'manual_review' ? '#b45309' :
-                                               order.finalDecision === 'hold' ? '#b91c1c' :
-                                               '#475569',
-                                        fontSize: 20 
-                                    }}>
-                                        {order.finalDecision === 'auto_confirm' ? 'verified_user' : 
-                                         order.finalDecision === 'manual_review' ? 'rate_review' :
-                                         order.finalDecision === 'hold' ? 'pan_tool_alt' :
-                                         'cancel'}
-                                    </span>
-                                    <h3 style={styles.sectionTitle}>Final Decision Logic</h3>
-                                </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                                    <span style={{
-                                        ...styles.badge,
-                                        width: 'fit-content',
-                                        background: order.finalDecision === 'auto_confirm' ? '#dcfce7' : 
-                                                    order.finalDecision === 'manual_review' ? '#ffedd5' :
-                                                    order.finalDecision === 'hold' ? '#fee2e2' :
-                                                    '#f1f5f9',
-                                        color: order.finalDecision === 'auto_confirm' ? '#15803d' : 
-                                               order.finalDecision === 'manual_review' ? '#c2410c' :
-                                               order.finalDecision === 'hold' ? '#b91c1c' :
-                                               '#475569',
-                                        fontSize: 12,
-                                        padding: '6px 12px'
-                                    }}>
-                                        {(order.finalDecision || 'pending').replace('_', ' ').toUpperCase()}
-                                    </span>
-                                    <p style={{ color: '#475569', fontSize: 13, fontWeight: 500, marginTop: 8 }}>
-                                        {order.decisionReason || 'Waiting for customer activity or analysis...'}
-                                    </p>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Recommendation */}
-                        <div style={styles.section}>
-                            <div style={styles.sectionHeader}>
-                                <span className="material-symbols-outlined" style={{ color: '#6366f1', fontSize: 20 }}>auto_awesome</span>
-                                <h3 style={styles.sectionTitle}>AI Prediction</h3>
-                            </div>
-                            <div style={{
-                                ...getRecommendationStyle(order.recommendation),
-                                padding: '16px 24px',
-                                borderRadius: 12,
-                                textAlign: 'center',
-                                fontSize: 18,
-                                fontWeight: 900,
-                                textTransform: 'uppercase',
-                                letterSpacing: 2,
-                            }}>
-                                {order.recommendation}
                             </div>
                         </div>
                     </>
@@ -353,160 +291,3 @@ export default function OrderDetailsModal({ order: initialOrder, onClose, loadin
         </div>
     );
 }
-
-const styles = {
-    overlay: {
-        position: 'fixed',
-        inset: 0,
-        background: 'rgba(0,0,0,0.5)',
-        backdropFilter: 'blur(4px)',
-        zIndex: 50,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 16,
-    },
-    modal: {
-        background: '#fff',
-        borderRadius: 20,
-        boxShadow: '0 25px 50px rgba(0,0,0,0.15)',
-        width: '100%',
-        maxWidth: 520,
-        maxHeight: '90vh',
-        overflowY: 'auto',
-    },
-    loadingContainer: {
-        padding: 64,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    header: {
-        padding: '24px 24px 20px',
-        borderBottom: '1px solid #f1f5f9',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    headerLabel: {
-        fontSize: 10,
-        fontWeight: 700,
-        color: '#94a3b8',
-        letterSpacing: 2,
-        textTransform: 'uppercase',
-        marginBottom: 4,
-    },
-    headerTitle: {
-        fontSize: 22,
-        fontWeight: 900,
-        color: '#0f172a',
-        margin: 0,
-    },
-    closeBtn: {
-        background: 'none',
-        border: 'none',
-        cursor: 'pointer',
-        padding: 8,
-        borderRadius: 8,
-        color: '#94a3b8',
-        transition: 'background 0.2s',
-    },
-    section: {
-        padding: '20px 24px',
-        borderBottom: '1px solid #f1f5f9',
-    },
-    sectionHeader: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: 8,
-        marginBottom: 16,
-    },
-    sectionTitle: {
-        fontSize: 13,
-        fontWeight: 700,
-        color: '#0f172a',
-        textTransform: 'uppercase',
-        letterSpacing: 1.5,
-        margin: 0,
-    },
-    grid4: {
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: 16,
-    },
-    grid3: {
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr 1fr',
-        gap: 12,
-    },
-    infoCell: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 4,
-    },
-    label: {
-        fontSize: 10,
-        fontWeight: 700,
-        color: '#94a3b8',
-        letterSpacing: 1.5,
-        textTransform: 'uppercase',
-        margin: 0,
-    },
-    value: {
-        fontSize: 14,
-        fontWeight: 600,
-        color: '#475569',
-        margin: 0,
-        marginTop: 2,
-    },
-    valueXl: {
-        fontSize: 18,
-        fontWeight: 900,
-        color: '#0f172a',
-        margin: 0,
-    },
-    badge: {
-        display: 'inline-block',
-        padding: '4px 10px',
-        borderRadius: 20,
-        fontSize: 10,
-        fontWeight: 700,
-        textTransform: 'uppercase',
-        letterSpacing: 0.5,
-        marginTop: 4,
-    },
-    reasonRow: {
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: 8,
-    },
-    signalRow: {
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: 10,
-        background: '#fff7ed',
-        border: '1px solid #fed7aa',
-        padding: '10px 14px',
-        borderRadius: 10,
-    },
-    statBox: {
-        padding: '14px 12px',
-        borderRadius: 14,
-        textAlign: 'center',
-    },
-    simulateBtn: {
-        flex: 1,
-        padding: '10px 0',
-        border: 'none',
-        borderRadius: 12,
-        color: '#fff',
-        fontSize: 11,
-        fontWeight: 800,
-        cursor: 'pointer',
-        transition: 'all 0.2s ease',
-        boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-        textTransform: 'uppercase',
-        letterSpacing: 1
-    }
-};
