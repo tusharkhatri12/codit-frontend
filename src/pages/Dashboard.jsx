@@ -158,8 +158,81 @@ export default function Dashboard() {
         loadDashboardData();
     }, [loadHeldOrders]);
 
+    const [showInitialLoader, setShowInitialLoader] = useState(true);
+    const [loaderMessage, setLoaderMessage] = useState('Initializing Risk Engine...');
+
+    useEffect(() => {
+        const messages = [
+            'Initializing Risk Engine...',
+            'Syncing Deterministic Guard Protocols...',
+            'Fetching Strategic Order Intelligence...'
+        ];
+        let msgIndex = 0;
+        const interval = setInterval(() => {
+            msgIndex = (msgIndex + 1) % messages.length;
+            setLoaderMessage(messages[msgIndex]);
+        }, 1000);
+
+        const timer = setTimeout(() => {
+            setShowInitialLoader(false);
+            clearInterval(interval);
+        }, 3000);
+
+        return () => {
+            clearTimeout(timer);
+            clearInterval(interval);
+        };
+    }, []);
+
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const isDemo = user.mode === 'demo';
+
+    if (showInitialLoader) {
+        return (
+            <div className="fixed inset-0 z-[200] bg-[#0c1324] flex flex-col items-center justify-center overflow-hidden">
+                {/* Ambient Background Effects */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] animate-pulse"></div>
+                <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-secondary/5 rounded-full blur-[80px]"></div>
+                
+                <div className="relative z-10 flex flex-col items-center">
+                    {/* Stylized Spinner */}
+                    <div className="relative w-24 h-24 mb-12">
+                        <div className="absolute inset-0 border-4 border-primary/20 rounded-full"></div>
+                        <div className="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+                        <div className="absolute inset-4 border-2 border-secondary/30 border-b-transparent rounded-full animate-spin" style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}></div>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="material-symbols-outlined text-primary text-3xl animate-pulse">shield_locked</span>
+                        </div>
+                    </div>
+
+                    {/* Loading Text */}
+                    <div className="text-center space-y-4">
+                        <h2 className="text-3xl font-black text-on-surface tracking-tighter uppercase leading-none">CODIT OS</h2>
+                        <div className="flex flex-col items-center gap-2">
+                             <div className="h-4 flex items-center">
+                                <p className="text-[10px] md:text-xs font-black text-primary uppercase tracking-[0.2em] animate-in fade-in slide-in-from-bottom-2 duration-500">
+                                    {loaderMessage}
+                                </p>
+                             </div>
+                             <div className="w-48 h-1 bg-[#2e3447] rounded-full overflow-hidden">
+                                <div className="h-full bg-gradient-to-r from-primary to-secondary animate-progress-fast"></div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <style>{`
+                    @keyframes progress-fast {
+                        0% { width: 0%; }
+                        100% { width: 100%; }
+                    }
+                    .animate-progress-fast {
+                        animation: progress-fast 3s linear forwards;
+                    }
+                `}</style>
+            </div>
+        );
+    }
 
     return (
         <div className="p-4 md:p-8 space-y-10 w-full max-w-7xl mx-auto flex-grow">
