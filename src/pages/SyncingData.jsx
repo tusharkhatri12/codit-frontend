@@ -8,6 +8,7 @@ export default function SyncingData() {
     const [progress, setProgress] = useState(0);
     const [stats, setStats] = useState({ ordersFound: 0, customersLinked: 0 });
     const [status, setStatus] = useState('pending');
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         const query = new URLSearchParams(location.search);
@@ -35,17 +36,25 @@ export default function SyncingData() {
 
                 if (ok && data) {
                     const { syncProgress, ordersFound, customersLinked, syncStatus } = data;
-                    setProgress(syncProgress);
-                    setStats({ ordersFound, customersLinked });
+                    setProgress(syncProgress || 0);
+                    setStats({ 
+                        ordersFound: ordersFound || 0, 
+                        customersLinked: customersLinked || 0 
+                    });
                     setStatus(syncStatus);
+                    setError(null);
 
                     if (syncStatus === 'completed' || syncProgress >= 100) {
                         setTimeout(() => navigate(`/dashboard?connected=true&shop=${shop}`), 2000);
                         return true; // Stop polling
                     }
+                } else {
+                    console.warn('Sync status not ready or failed:', data?.error);
+                    // Don't set hard error yet, might be transient
                 }
             } catch (err) {
                 console.error('Failed to poll sync status:', err);
+                setError('Unable to reach sync server. Retrying...');
             }
             return false;
         };
@@ -110,8 +119,8 @@ export default function SyncingData() {
                         <div className="flex justify-between items-center text-xs md:text-sm font-medium">
                             <span className="text-primary font-bold">{progress}% Complete</span>
                             <span className="text-on-surface-variant flex items-center gap-1.5 md:gap-2">
-                                <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-primary animate-pulse"></span>
-                                Processing Data
+                                <span className={`w-1.5 h-1.5 md:w-2 md:h-2 rounded-full ${error ? 'bg-error' : 'bg-primary'} animate-pulse`}></span>
+                                {error || 'Processing Data'}
                             </span>
                         </div>
                     </div>
@@ -121,14 +130,14 @@ export default function SyncingData() {
                             <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-surface-container-lowest flex items-center justify-center mb-3 md:mb-5 text-primary shadow-sm">
                                 <span className="material-symbols-outlined text-lg md:text-2xl">shopping_cart</span>
                             </div>
-                            <div className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-on-surface mb-1">{stats.ordersFound.toLocaleString()}</div>
+                            <div className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-on-surface mb-1">{(stats?.ordersFound || 0).toLocaleString()}</div>
                             <div className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-on-surface-variant">Orders found</div>
                         </div>
                         <div className="bg-surface-container-low p-4 md:p-6 lg:p-8 rounded-[1rem] md:rounded-[1.5rem] text-left transition-transform hover:-translate-y-1 duration-300 shadow-sm md:shadow-none border border-outline-variant/5">
                             <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-surface-container-lowest flex items-center justify-center mb-3 md:mb-5 text-secondary shadow-sm">
                                 <span className="material-symbols-outlined text-lg md:text-2xl">group</span>
                             </div>
-                            <div className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-on-surface mb-1">{stats.customersLinked.toLocaleString()}</div>
+                            <div className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-on-surface mb-1">{(stats?.customersLinked || 0).toLocaleString()}</div>
                             <div className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-on-surface-variant">Customers linked</div>
                         </div>
                         <div className="bg-surface-container-low p-4 md:p-6 lg:p-8 rounded-[1rem] md:rounded-[1.5rem] text-left transition-transform hover:-translate-y-1 duration-300 shadow-sm md:shadow-none border border-outline-variant/5">
