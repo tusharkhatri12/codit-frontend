@@ -11,7 +11,10 @@ import Orders from './pages/Orders';
 import RiskPatterns from './pages/RiskPatterns';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
+import Settings from './pages/Settings';
 import Onboarding from './pages/Onboarding';
+import VerifyOTP from './pages/VerifyOTP';
+import AuthSuccess from './pages/AuthSuccess';
 import { Navigate } from 'react-router-dom';
 import TourManager from './tour/TourManager';
 
@@ -31,6 +34,8 @@ function App() {
             <Route path="/syncing" element={<SyncingData />} />
             <Route path="/connected" element={<StoreConnected />} />
             <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/verify-otp" element={<VerifyOTP />} />
+            <Route path="/auth/success" element={<AuthSuccess />} />
             
             <Route path="/dashboard" element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
               <Route index element={<Dashboard />} />
