@@ -26,6 +26,23 @@ export default function Dashboard() {
     });
     const [orderDetail, setOrderDetail] = useState(null);
     const [detailLoading, setDetailLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
+
+    useEffect(() => {
+        const query = new URLSearchParams(window.location.search);
+        if (query.get('connected') === 'true') {
+            setSuccessMessage(`Shopify store connected successfully. Live protection enabled.`);
+            // Clean URL after 3 seconds or immediately? 
+            // Better to show it for a while.
+            const timer = setTimeout(() => setSuccessMessage(''), 8000);
+            
+            // Clean URL query params to avoid re-triggering on refresh
+            const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            window.history.pushState({path:newurl},'',newurl);
+            
+            return () => clearTimeout(timer);
+        }
+    }, []);
 
     const loadHeldOrders = useCallback(async () => {
         try {
@@ -146,6 +163,16 @@ export default function Dashboard() {
 
     return (
         <div className="p-4 md:p-8 space-y-10 w-full max-w-7xl mx-auto flex-grow">
+            {/* Success Banner for Shopify Connection */}
+            {successMessage && (
+                <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4 flex items-center gap-3 shadow-lg backdrop-blur-md animate-in slide-in-from-top-4 duration-500">
+                    <div className="p-2 bg-emerald-500/20 rounded-full text-emerald-400">
+                        <span className="material-symbols-outlined">check_circle</span>
+                    </div>
+                    <p className="text-sm font-bold text-emerald-400">{successMessage}</p>
+                </div>
+            )}
+
             {/* Demo/Live Status Banner Styled for Dark Theme */}
             {isDemo && (
                 <div className="bg-[#2e3447]/40 border border-amber-500/20 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between shadow-lg backdrop-blur-md animate-in fade-in duration-500 gap-4">

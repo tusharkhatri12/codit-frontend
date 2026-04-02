@@ -1,24 +1,66 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { fetchAPI } from '../utils/api';
 
 export default function SyncingData() {
     const navigate = useNavigate();
+    const location = useLocation();
     const [progress, setProgress] = useState(0);
+    const [stats, setStats] = useState({ ordersFound: 0, customersLinked: 0 });
+    const [status, setStatus] = useState('pending');
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setProgress((prev) => {
-                if (prev >= 100) {
-                    clearInterval(interval);
-                    navigate('/connected');
-                    return 100;
+        const query = new URLSearchParams(location.search);
+        const shop = query.get('shop');
+
+        if (!shop) {
+            console.error('No shop provided for sync');
+            // Mock simulation as fallback
+            const interval = setInterval(() => {
+                setProgress((prev) => {
+                    if (prev >= 100) {
+                        clearInterval(interval);
+                        navigate('/dashboard?connected=true');
+                        return 100;
+                    }
+                    return prev + 1;
+                });
+            }, 100);
+            return () => clearInterval(interval);
+        }
+
+        const pollSyncStatus = async () => {
+            try {
+                const { ok, data } = await fetchAPI(`/shops/sync-status?shop=${shop}`);
+
+                if (ok && data) {
+                    const { syncProgress, ordersFound, customersLinked, syncStatus } = data;
+                    setProgress(syncProgress);
+                    setStats({ ordersFound, customersLinked });
+                    setStatus(syncStatus);
+
+                    if (syncStatus === 'completed' || syncProgress >= 100) {
+                        setTimeout(() => navigate(`/dashboard?connected=true&shop=${shop}`), 2000);
+                        return true; // Stop polling
+                    }
                 }
-                return prev + 2;
-            });
-        }, 50);
+            } catch (err) {
+                console.error('Failed to poll sync status:', err);
+            }
+            return false;
+        };
+
+        // Initial poll
+        pollSyncStatus();
+
+        // Polling interval
+        const interval = setInterval(async () => {
+            const finished = await pollSyncStatus();
+            if (finished) clearInterval(interval);
+        }, 2000);
 
         return () => clearInterval(interval);
-    }, [navigate]);
+    }, [navigate, location]);
 
     return (
         <main className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 lg:p-12 text-on-surface w-full overflow-x-hidden relative">
@@ -79,14 +121,14 @@ export default function SyncingData() {
                             <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-surface-container-lowest flex items-center justify-center mb-3 md:mb-5 text-primary shadow-sm">
                                 <span className="material-symbols-outlined text-lg md:text-2xl">shopping_cart</span>
                             </div>
-                            <div className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-on-surface mb-1">{Math.floor(progress * 124.82).toLocaleString()}</div>
+                            <div className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-on-surface mb-1">{stats.ordersFound.toLocaleString()}</div>
                             <div className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-on-surface-variant">Orders found</div>
                         </div>
                         <div className="bg-surface-container-low p-4 md:p-6 lg:p-8 rounded-[1rem] md:rounded-[1.5rem] text-left transition-transform hover:-translate-y-1 duration-300 shadow-sm md:shadow-none border border-outline-variant/5">
                             <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-surface-container-lowest flex items-center justify-center mb-3 md:mb-5 text-secondary shadow-sm">
                                 <span className="material-symbols-outlined text-lg md:text-2xl">group</span>
                             </div>
-                            <div className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-on-surface mb-1">{Math.floor(progress * 89.1).toLocaleString()}</div>
+                            <div className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-on-surface mb-1">{stats.customersLinked.toLocaleString()}</div>
                             <div className="text-[10px] md:text-xs font-bold uppercase tracking-wider text-on-surface-variant">Customers linked</div>
                         </div>
                         <div className="bg-surface-container-low p-4 md:p-6 lg:p-8 rounded-[1rem] md:rounded-[1.5rem] text-left transition-transform hover:-translate-y-1 duration-300 shadow-sm md:shadow-none border border-outline-variant/5">

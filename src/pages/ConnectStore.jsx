@@ -8,28 +8,33 @@ export default function ConnectStore() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const handleConnect = async (e) => {
+    const handleConnect = (e) => {
         e.preventDefault();
         setError('');
-        setLoading(true);
-
-        try {
-            const { ok, data } = await fetchAPI('/shops/connect', {
-                method: 'POST',
-                body: JSON.stringify({ domain })
-            });
-
-            if (ok) {
-                // Store connected successfully, proceed to sync
-                navigate('/syncing');
-            } else {
-                setError(data.error || 'Failed to connect store');
-            }
-        } catch (err) {
-            setError('Connection error. Is the backend running?');
-        } finally {
-            setLoading(false);
+        
+        let shop = domain.trim().toLowerCase();
+        if (!shop) {
+            setError('Please enter your Shopify store domain');
+            return;
         }
+
+        // Auto-format: append .myshopify.com if missing
+        if (!shop.includes('.myshopify.com')) {
+            shop = `${shop}.myshopify.com`;
+        }
+        
+        // Remove protocol if user pasted it
+        shop = shop.replace(/^https?:\/\//, '').replace(/\/$/, '');
+
+        setLoading(true);
+        console.log("Redirecting to Shopify:", shop);
+
+        const token = localStorage.getItem('token');
+        const backendUrl = process.env.REACT_APP_API_URL || 'https://codit-backend.onrender.com';
+        
+        // Full page redirect to backend OAuth initiation
+        // We pass the JWT token to identify the user in the callback
+        window.location.href = `${backendUrl}/auth/shopify?shop=${shop}&token=${token}`;
     };
 
     return (
