@@ -90,7 +90,7 @@ export default function Orders() {
 
     const formatDate = (dateString) => {
         const d = new Date(dateString);
-        return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return d.toLocaleDateString([], { day: '2-digit', month: 'short' }) + ' | ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
     };
 
     const handleExport = async () => {
@@ -210,220 +210,214 @@ export default function Orders() {
     const isModeDemo = user.mode === 'demo';
 
     return (
-        <div className="p-4 md:p-8 max-w-[1400px] mx-auto w-full flex-grow">
-            {isModeDemo && (
-                <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-center justify-between shadow-sm animate-in fade-in slide-in-from-top-4 duration-500 mb-8">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600">
-                            <span className="material-symbols-outlined">info</span>
-                        </div>
-                        <div>
-                            <p className="text-sm font-bold text-amber-900">Viewing Demo Orders</p>
-                            <p className="text-xs text-amber-700">These are sample orders for evaluation. Connect Shopify to see your real store data.</p>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {!isModeDemo && (
-                 <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 flex items-center gap-3 shadow-sm mb-8">
-                    <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600">
-                        <span className="material-symbols-outlined">verified</span>
+        <div className="pt-24 pb-12 px-8 max-w-[1600px] mx-auto w-full flex-grow">
+            {/* Live Status Banner */}
+            <div className={`mb-8 flex items-center justify-between p-4 ${isModeDemo ? 'bg-amber-500/5 border-amber-500/20' : 'bg-emerald-500/5 border-emerald-500/20 status-glow-green'} rounded-2xl border transition-all animate-in fade-in slide-in-from-top-4 duration-500`}>
+                <div className="flex items-center gap-3">
+                    <div className={`flex items-center justify-center w-8 h-8 rounded-full ${isModeDemo ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-emerald-400'} animate-pulse`}>
+                        <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>
+                            {isModeDemo ? 'info' : 'security'}
+                        </span>
                     </div>
                     <div>
-                        <p className="text-sm font-bold text-emerald-900">Live Order Protection Active</p>
-                        <p className="text-xs text-emerald-700">Monitoring real-time Shopify webhooks for mystore.myshopify.com</p>
+                        <p className={`text-sm font-bold ${isModeDemo ? 'text-amber-400' : 'text-emerald-400'} font-headline`}>
+                            {isModeDemo ? 'Viewing Demo Orders' : 'Live Order Protection Active'}
+                        </p>
+                        <p className={`text-xs ${isModeDemo ? 'text-amber-400/70' : 'text-emerald-400/70'}`}>
+                            {isModeDemo ? 'Sample orders for evaluation. Connect Shopify for real data.' : 'Scanning active transactions for potential fraud patterns.'}
+                        </p>
                     </div>
                 </div>
-            )}
-
-            {/* Filter Bar */}
-            <div className="flex flex-col md:flex-row flex-wrap items-start md:items-center justify-between gap-4 mb-8">
-                <div id="tour-filter-bar" className="flex items-center bg-slate-50 p-1 rounded-xl w-full md:w-auto overflow-x-auto">
-                    <button onClick={() => { setActiveTab('all'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'all' ? 'bg-white shadow-sm text-primary' : 'text-slate-500 hover:text-slate-900'}`}>All Orders</button>
-                    <button onClick={() => { setActiveTab('flagged'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'flagged' ? 'bg-white shadow-sm text-error' : 'text-slate-500 hover:text-slate-900'}`}>Flagged</button>
-                    <button onClick={() => { setActiveTab('verified'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'verified' ? 'bg-white shadow-sm text-emerald-600' : 'text-slate-500 hover:text-slate-900'}`}>Verified</button>
-                    <button onClick={() => { setActiveTab('pending'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'pending' ? 'bg-white shadow-sm text-amber-600' : 'text-slate-500 hover:text-slate-900'}`}>Review</button>
-                    <button onClick={() => { setActiveTab('held'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'held' ? 'bg-white shadow-sm text-orange-600' : 'text-slate-500 hover:text-slate-900'}`}>Held</button>
-                    <button onClick={() => { setActiveTab('canceled'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'canceled' ? 'bg-white shadow-sm text-slate-800' : 'text-slate-500 hover:text-slate-900'}`}>Canceled</button>
-                    <button onClick={() => { setActiveTab('awaiting_payment'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'awaiting_payment' ? 'bg-white shadow-sm text-amber-500' : 'text-slate-500 hover:text-slate-900'}`}>Awaiting Payment</button>
-                    <button onClick={() => { setActiveTab('payment_completed'); setPagination(p=>({...p, page:1}))}} className={`px-4 py-2 text-sm font-semibold rounded-lg transition-all whitespace-nowrap ${activeTab === 'payment_completed' ? 'bg-white shadow-sm text-emerald-500' : 'text-slate-500 hover:text-slate-900'}`}>Payment Received</button>
-                </div>
-                
-                <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-                    <div className="relative flex-1 md:flex-auto min-w-[200px]">
-                        <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-                        <input 
-                            type="text" 
-                            placeholder="Search order ID or phone..." 
-                            value={searchQuery}
-                            onChange={(e) => { setSearchQuery(e.target.value); setPagination(p=>({...p, page:1})) }}
-                            className="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/10 text-sm"
-                        />
+                <div className="flex items-center gap-6">
+                    <div className="text-right">
+                        <p className="text-[10px] text-slate-500 uppercase tracking-widest">Efficiency</p>
+                        <p className="text-sm font-bold text-on-surface">99.98%</p>
                     </div>
-
-                    <div onClick={() => { setDateRange(prev => prev === 'last30' ? null : 'last30'); setPagination(p=>({...p, page:1})) }} className={`flex items-center gap-2 px-4 py-2 rounded-xl shadow-sm border cursor-pointer transition-colors flex-1 md:flex-auto justify-center ${dateRange === 'last30' ? 'bg-primary-container/30 border-primary text-primary' : 'bg-white border-slate-200/50 hover:bg-slate-50 text-slate-700'}`}>
-                        <span className="material-symbols-outlined text-lg">calendar_today</span>
-                        <span className="text-sm font-medium whitespace-nowrap">Last 30 Days</span>
-                    </div>
-
-                    <button onClick={handleExport} disabled={isExporting} className="signature-gradient text-white px-6 py-2 rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:opacity-90 transition-opacity whitespace-nowrap flex items-center gap-2 w-full sm:w-auto justify-center disabled:opacity-70 disabled:hover:opacity-70">
-                        {isExporting ? <span className="material-symbols-outlined animate-spin text-[18px]">refresh</span> : <><span className="material-symbols-outlined text-[18px]">download</span> Export Report</>}
+                    <button className={`px-4 py-2 ${isModeDemo ? 'bg-amber-500/10 text-amber-400 border-amber-500/20 hover:bg-amber-500/20' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20 hover:bg-emerald-500/20'} text-xs font-bold rounded-lg border transition-all`}>
+                        View Logs
                     </button>
                 </div>
             </div>
 
-            {/* Orders Table Section */}
-            <section id="tour-orders-table" className="bg-white rounded-[24px] shadow-[0px_4px_24px_rgba(44,47,49,0.04)] border border-slate-200/50 overflow-hidden w-full">
-                <div className="overflow-x-auto w-full">
-                    <table className="w-full text-left border-collapse whitespace-nowrap">
-                        <thead className="bg-slate-50/50">
-                            <tr>
-                                <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">Order ID</th>
-                                <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">Customer</th>
-                                <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">Amount</th>
-                                <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">Contact</th>
-                                <th id="tour-header-score" className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">AI Risk Score</th>
-                                <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">Risk Status</th>
-                                 <th id="tour-header-action" className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">Action Taken</th>
-                                <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">Payment Status</th>
-                                <th id="tour-header-whatsapp" className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500">WhatsApp</th>
-                                <th className="px-6 py-4 text-[11px] font-bold uppercase tracking-[0.05em] text-slate-500 text-right">Actions</th>
+            {/* Filters & Actions Header */}
+            <div className="flex flex-col gap-6 mb-8">
+                <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+                    <div>
+                        <h2 className="text-3xl font-extrabold tracking-tight text-on-surface font-headline mb-1">Order Pipeline</h2>
+                        <p className="text-sm text-on-surface-variant">Real-time oversight of technical and commercial transactions.</p>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-3">
+                        <div className="relative flex-1 min-w-[240px]">
+                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+                            <input 
+                                type="text" 
+                                placeholder="Search Order ID, Customer..." 
+                                value={searchQuery}
+                                onChange={(e) => { setSearchQuery(e.target.value); setPagination(p=>({...p, page:1})) }}
+                                className="w-full bg-surface-container-lowest border-none rounded-xl py-2.5 pl-10 pr-4 text-sm focus:ring-1 focus:ring-primary/30 text-on-surface placeholder:text-slate-500"
+                            />
+                        </div>
+                        <div 
+                            onClick={() => { setDateRange(prev => prev === 'last30' ? null : 'last30'); setPagination(p=>({...p, page:1})) }}
+                            className={`flex items-center gap-2 bg-surface-container-low p-2 rounded-xl cursor-pointer transition-all hover:bg-surface-container-highest/50 ${dateRange === 'last30' ? 'ring-1 ring-primary/40' : ''}`}
+                        >
+                            <span className="material-symbols-outlined text-sm text-slate-400 ml-1">calendar_today</span>
+                            <span className={`text-xs font-medium ${dateRange === 'last30' ? 'text-primary' : 'text-on-surface'}`}>Last 30 Days</span>
+                            <span className="material-symbols-outlined text-sm text-slate-400">expand_more</span>
+                        </div>
+                        <button 
+                            onClick={handleExport}
+                            disabled={isExporting}
+                            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-br from-primary to-primary-container text-on-primary-fixed font-bold rounded-xl shadow-lg shadow-primary/10 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-70 disabled:hover:scale-100"
+                        >
+                            <span className="material-symbols-outlined text-sm">{isExporting ? 'refresh' : 'ios_share'}</span>
+                            <span className="text-sm">{isExporting ? 'Exporting...' : 'Export Report'}</span>
+                        </button>
+                    </div>
+                </div>
+
+                {/* Tabbed Navigation */}
+                <div id="tour-filter-bar" className="flex items-center gap-2 overflow-x-auto pb-2 table-scrollbar">
+                    {[
+                        { id: 'all', label: 'All Orders' },
+                        { id: 'flagged', label: 'Flagged', color: 'text-error' },
+                        { id: 'verified', label: 'Verified', color: 'text-emerald-400' },
+                        { id: 'pending', label: 'Review', color: 'text-tertiary' },
+                        { id: 'held', label: 'Held', color: 'text-orange-400' },
+                        { id: 'canceled', label: 'Canceled' },
+                        { id: 'awaiting_payment', label: 'Awaiting Payment' },
+                        { id: 'payment_completed', label: 'Payment Received' }
+                    ].map(tab => (
+                        <button 
+                            key={tab.id}
+                            onClick={() => { setActiveTab(tab.id); setPagination(p=>({...p, page:1}))}}
+                            className={`px-5 py-2 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
+                                activeTab === tab.id 
+                                ? 'bg-primary text-on-primary' 
+                                : `text-slate-400 hover:bg-surface-container-highest/50 hover:text-on-surface`
+                            } ${activeTab === tab.id && tab.color ? tab.color : ''}`}
+                        >
+                            {tab.label}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {/* Orders Table Container */}
+            <div id="tour-orders-table" className="bg-surface-container-low rounded-2xl overflow-hidden shadow-2xl border border-outline-variant/5">
+                <div className="overflow-x-auto table-scrollbar">
+                    <table className="w-full text-left border-collapse min-w-[1000px]">
+                        <thead>
+                            <tr className="border-b border-outline-variant/10">
+                                <th className="px-6 py-5 text-xs font-bold text-on-surface-variant uppercase tracking-widest">Order ID & Date</th>
+                                <th className="px-6 py-5 text-xs font-bold text-on-surface-variant uppercase tracking-widest">Customer</th>
+                                <th className="px-6 py-5 text-xs font-bold text-on-surface-variant uppercase tracking-widest">Amount</th>
+                                <th className="px-6 py-5 text-xs font-bold text-on-surface-variant uppercase tracking-widest">Contact</th>
+                                <th className="px-6 py-5 text-xs font-bold text-on-surface-variant uppercase tracking-widest">AI Risk Score</th>
+                                <th className="px-6 py-5 text-xs font-bold text-on-surface-variant uppercase tracking-widest">Status</th>
+                                <th className="px-6 py-5 text-xs font-bold text-on-surface-variant uppercase tracking-widest text-center">WhatsApp</th>
+                                <th className="px-6 py-5 text-xs font-bold text-on-surface-variant uppercase tracking-widest text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-surface-container">
+                        <tbody className="divide-y divide-outline-variant/5">
                             {loading ? (
                                 <tr>
-                                    <td colSpan="7" className="px-6 py-12 text-center text-slate-500 text-sm font-medium">Loading orders...</td>
+                                    <td colSpan="8" className="px-6 py-12 text-center text-on-surface-variant text-sm font-medium">
+                                        <div className="flex flex-col items-center gap-2">
+                                            <span className="material-symbols-outlined animate-spin text-primary">refresh</span>
+                                            Loading intelligent pipeline...
+                                        </div>
+                                    </td>
                                 </tr>
                             ) : orders.length === 0 ? (
                                 <tr>
-                                    <td colSpan="7" className="px-6 py-12 text-center text-slate-500 text-sm font-medium">No orders found.</td>
+                                    <td colSpan="8" className="px-6 py-12 text-center text-on-surface-variant text-sm font-medium">No order data found for current filters.</td>
                                 </tr>
                             ) : (
                                 orders.map(order => {
                                     const init = order.customer?.firstName?.charAt(0) || '?';
-                                    const isCritical = order.riskLevel === 'CRITICAL';
-                                    const isHigh = order.riskLevel === 'HIGH';
+                                    const isCritical = order.riskLevel === 'CRITICAL' || order.riskLevel === 'HIGH';
                                     const isMedium = order.riskLevel === 'MEDIUM';
-                                    const isLow = order.riskLevel === 'LOW';
-                                    
-                                    const riskColorClass = isCritical ? 'error' : isHigh ? 'orange-600' : isMedium ? 'tertiary' : 'emerald-600';
-                                    const riskBgClass = isCritical ? 'bg-error' : isHigh ? 'bg-orange-500' : isMedium ? 'bg-tertiary' : 'bg-emerald-500';
-                                    const riskBgContainer = isCritical ? 'bg-error-container text-on-error-container' : isHigh ? 'bg-orange-100 text-orange-700' : isMedium ? 'bg-tertiary-container text-tertiary' : 'bg-emerald-100 text-emerald-700';
+                                    const riskColor = isCritical ? 'text-error' : isMedium ? 'text-tertiary' : 'text-emerald-400';
+                                    const riskBg = isCritical ? 'bg-error' : isMedium ? 'bg-tertiary' : 'bg-emerald-500';
+                                    const riskTag = isCritical ? 'High Risk' : isMedium ? 'Medium Risk' : 'Low Risk';
+                                    const riskLabel = isCritical ? 'Critical' : isMedium ? 'Review' : 'Safe';
+                                    const riskTagStyles = isCritical ? 'bg-error/10 text-error border-error/20' : isMedium ? 'bg-tertiary/10 text-tertiary border-tertiary/20' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
 
                                     return (
-                                        <tr key={order._id} className="hover:bg-slate-50 transition-colors group">
-                                            <td className="px-6 py-5">
-                                                <div className="flex flex-col">
-                                                    <span className="text-sm font-bold text-slate-900">#{order.orderNumber}</span>
-                                                    <span className="text-xs text-slate-500">{formatDate(order.createdAt)}</span>
-                                                </div>
+                                        <tr key={order._id} className="group hover:bg-surface-container-highest/30 transition-colors">
+                                            <td className="px-6 py-4">
+                                                <p className="text-sm font-bold text-on-surface">#{order.orderNumber}</p>
+                                                <p className="text-[10px] text-on-surface-variant">{formatDate(order.createdAt)}</p>
                                             </td>
-                                            <td className="px-6 py-5">
+                                            <td className="px-6 py-4">
                                                 <div className="flex items-center gap-3">
-                                                    <div className={`w-8 h-8 rounded-full ${isCritical?'bg-error-container/20 text-error':isMedium?'bg-tertiary-container/20 text-tertiary':'bg-slate-100 text-slate-500'} flex items-center justify-center font-bold text-xs`}>
-                                                        {init}
+                                                    <div className={`w-8 h-8 rounded-lg ${isCritical?'bg-error/10 text-error':isMedium?'bg-tertiary/10 text-tertiary':'bg-primary/10 text-primary'} flex items-center justify-center font-bold text-xs`}>
+                                                        {init}{order.customer?.lastName?.charAt(0)}
                                                     </div>
-                                                    <span className="text-sm font-medium">{order.customer?.firstName} {order.customer?.lastName}</span>
+                                                    <span className="text-sm font-semibold">{order.customer?.firstName} {order.customer?.lastName}</span>
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-5">
-                                                <span className="text-sm font-black text-slate-900">₹{(order.totalPrice || 0).toLocaleString()}</span>
+                                            <td className="px-6 py-4">
+                                                <p className="text-sm font-bold">₹{(order.totalPrice || 0).toLocaleString()}</p>
                                             </td>
-                                            <td className="px-6 py-5">
-                                                <div className="flex items-center gap-2">
-                                                    <span className="material-symbols-outlined text-[14px] text-slate-400">call</span>
-                                                    <span className="text-sm text-slate-500">{order.customer?.phone || 'N/A'}</span>
-                                                </div>
+                                            <td className="px-6 py-4">
+                                                <p className="text-xs text-on-surface-variant">{order.customer?.phone || 'N/A'}</p>
                                             </td>
-                                            <td className="px-6 py-5">
-                                                <div className="w-full max-w-[120px] group/risk relative cursor-help" title={order.riskReasons?.join(', ') || 'No specific risk factors detected'}>
-                                                    <div className="flex justify-between items-center mb-1">
-                                                        <span className={`text-[10px] font-bold text-${riskColorClass}`}>{order.riskScore} / 100</span>
+                                            <td className="px-6 py-4">
+                                                <div className="w-32 group/risk relative cursor-help" title={order.riskReasons?.join(', ')}>
+                                                    <div className="flex justify-between mb-1">
+                                                        <span className={`text-[10px] ${riskColor}`}>{riskLabel}</span>
+                                                        <span className="text-[10px] font-bold">{order.riskScore}%</span>
                                                     </div>
-                                                    <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                                                        <div className={`h-full ${riskBgClass} rounded-full transition-all duration-500`} style={{ width: `${order.riskScore}%` }}></div>
-                                                    </div>
-                                                    
-                                                    {/* Custom Tooltip */}
-                                                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-900 text-white text-[10px] p-2 rounded-lg opacity-0 group-hover/risk:opacity-100 transition-opacity pointer-events-none z-10 shadow-xl">
-                                                        <p className="font-bold border-b border-white/10 pb-1 mb-1 uppercase tracking-widest">Intelligence Insights</p>
-                                                        <ul className="space-y-1">
-                                                            {order.riskReasons && order.riskReasons.length > 0 ? (
-                                                                order.riskReasons.map((r, i) => <li key={i} className="flex items-start gap-1"><span className="text-emerald-400">•</span> {r}</li>)
-                                                            ) : (
-                                                                <li>No significant risk patterns detected.</li>
-                                                            )}
-                                                        </ul>
-                                                        <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-slate-900"></div>
+                                                    <div className="h-1 w-full bg-outline-variant/20 rounded-full overflow-hidden">
+                                                        <div className={`h-full ${riskBg} rounded-full transition-all duration-500`} style={{ width: `${order.riskScore}%` }}></div>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-5">
-                                                <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold ${riskBgContainer}`}>
-                                                    {order.riskLevel}
+                                            <td className="px-6 py-4">
+                                                <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border uppercase tracking-tighter ${riskTagStyles}`}>
+                                                    {riskTag}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-5">
-                                                <div className="flex flex-col">
-                                                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter ${
-                                                        order.finalDecision === 'auto_confirm' ? 'bg-emerald-100 text-emerald-700' :
-                                                        order.finalDecision === 'manual_review' ? 'bg-orange-100 text-orange-700' :
-                                                        order.finalDecision === 'hold' ? 'bg-rose-100 text-rose-700' :
-                                                        'bg-slate-100 text-slate-700'
-                                                    }`}>
-                                                        {order.finalDecision ? order.finalDecision.replace('_', ' ') : 'PENDING'}
-                                                    </span>
-                                                    <span className="text-[10px] font-medium text-slate-400 mt-1 truncate max-w-[120px]" title={order.decisionReason}>
-                                                        {order.decisionReason || 'Waiting for reply'}
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-5">
-                                                {order.paymentRequired ? (
-                                                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold ${
-                                                        order.paymentStatus === 'paid' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700 animate-pulse-slow'
-                                                    }`}>
-                                                        <span className="material-symbols-outlined text-[14px]">
-                                                            {order.paymentStatus === 'paid' ? 'check_circle' : 'payments'}
-                                                        </span>
-                                                        {order.paymentStatus === 'paid' ? 'Payment Received ✅' : 'Awaiting Payment 💰'}
-                                                    </span>
-                                                ) : (
-                                                    <span className="text-xs text-slate-400">—</span>
-                                                )}
-                                            </td>
-                                            <td className="px-6 py-5">
-                                                <span className="text-xs font-semibold px-2 py-1 bg-slate-100 text-slate-600 rounded">
-                                                    {order.whatsappDeliveryStatus || 'pending'}
+                                            <td className="px-6 py-4 text-center">
+                                                <span 
+                                                    className={`material-symbols-outlined text-lg ${order.whatsappDeliveryStatus === 'delivered' || order.whatsappDeliveryStatus === 'read' ? 'text-emerald-500' : 'text-slate-600'}`}
+                                                    style={{ fontVariationSettings: order.whatsappDeliveryStatus === 'delivered' || order.whatsappDeliveryStatus === 'read' ? "'FILL' 1" : "" }}
+                                                >
+                                                    chat
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-5 text-right">
-                                                <div className="flex items-center justify-end gap-2 lg:opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <td className="px-6 py-4 text-right">
+                                                <div className="flex items-center justify-end gap-2">
                                                     {activeTab === 'held' ? (
                                                         <>
                                                             <button 
                                                                 onClick={() => handleRelease(order._id)}
-                                                                className="flex items-center gap-1 px-3 py-1.5 bg-emerald-100 text-emerald-700 text-xs font-black rounded-lg hover:bg-emerald-200 transition-colors uppercase tracking-tighter"
-                                                                title="Release and Confirm Order"
+                                                                className="px-3 py-1.5 bg-emerald-500 text-white text-[10px] font-bold rounded-lg hover:brightness-110 transition-all uppercase"
                                                             >
-                                                                <span className="material-symbols-outlined text-[16px]">check_circle</span>
                                                                 Release
                                                             </button>
                                                             <button 
                                                                 onClick={() => handleCancel(order._id)}
-                                                                className="flex items-center gap-1 px-3 py-1.5 bg-rose-100 text-rose-700 text-xs font-black rounded-lg hover:bg-rose-200 transition-colors uppercase tracking-tighter"
-                                                                title="Cancel Order Manually"
+                                                                className="px-3 py-1.5 bg-error text-white text-[10px] font-bold rounded-lg hover:brightness-110 transition-all uppercase"
                                                             >
-                                                                <span className="material-symbols-outlined text-[16px]">cancel</span>
-                                                                Drop
+                                                                Cancel
                                                             </button>
                                                         </>
                                                     ) : (
-                                                        <button onClick={() => viewOrderDetails(order._id)} className="tour-details-btn px-4 py-1.5 bg-slate-200 text-slate-900 text-[10px] font-black rounded-lg hover:bg-slate-300 transition-all uppercase tracking-widest shadow-sm">
-                                                            Details
-                                                        </button>
+                                                        <>
+                                                            <button 
+                                                                onClick={() => viewOrderDetails(order._id)}
+                                                                className="p-2 text-on-surface-variant hover:text-primary hover:bg-primary/5 rounded-lg transition-all"
+                                                                title="View Intelligence"
+                                                            >
+                                                                <span className="material-symbols-outlined text-sm text-[18px]">visibility</span>
+                                                            </button>
+                                                            <button className="p-2 text-on-surface-variant hover:text-primary hover:bg-primary/5 rounded-lg transition-all">
+                                                                <span className="material-symbols-outlined text-sm text-[18px]">more_vert</span>
+                                                            </button>
+                                                        </>
                                                     )}
                                                 </div>
                                             </td>
@@ -436,74 +430,117 @@ export default function Orders() {
                 </div>
                 
                 {/* Pagination */}
-                <div className="bg-slate-50/50 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-200">
-                    <p className="text-xs text-slate-500 font-medium text-center sm:text-left">
-                        Total Base <span className="text-slate-900 font-bold">{pagination.total}</span> entries matched
+                <div className="px-6 py-4 flex items-center justify-between border-t border-outline-variant/10">
+                    <p className="text-xs text-on-surface-variant">
+                        Showing <span className="text-on-surface font-bold">{orders.length}</span> of <span className="text-on-surface font-bold">{pagination.total}</span> orders
                     </p>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center gap-2">
                         <button 
                             onClick={() => setPagination(p => ({...p, page: Math.max(1, p.page - 1)}))}
                             disabled={pagination.page <= 1}
-                            className="p-1.5 rounded-lg hover:bg-slate-200 transition-colors disabled:opacity-30">
-                            <span className="material-symbols-outlined text-lg">chevron_left</span>
+                            className="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant border border-outline-variant/30 hover:bg-surface-container-highest transition-all disabled:opacity-30"
+                        >
+                            <span className="material-symbols-outlined text-sm">chevron_left</span>
                         </button>
                         
-                        <button className="w-8 h-8 rounded-lg bg-primary text-white text-xs font-bold">{pagination.page}</button>
+                        <button className="w-8 h-8 rounded-lg flex items-center justify-center bg-primary text-on-primary text-xs font-bold">
+                            {pagination.page}
+                        </button>
                         
                         <button 
                             onClick={() => setPagination(p => ({...p, page: p.page + 1}))}
                             disabled={pagination.page >= (pagination.pages || 1)}
-                            className="p-1.5 rounded-lg hover:bg-slate-200 transition-colors disabled:opacity-30">
-                            <span className="material-symbols-outlined text-lg">chevron_right</span>
+                            className="w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant border border-outline-variant/30 hover:bg-surface-container-highest transition-all disabled:opacity-30"
+                        >
+                            <span className="material-symbols-outlined text-sm">chevron_right</span>
                         </button>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            {/* Quick Insight Bento Grid (Asymmetric) */}
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white p-6 rounded-[24px] shadow-[0px_4px_24px_rgba(44,47,49,0.04)] border border-slate-200/50 flex flex-col justify-between min-h-[160px]">
-                    <div>
-                        <div className="flex items-center gap-2 mb-2">
-                            <span className="material-symbols-outlined text-primary text-lg">auto_awesome</span>
-                            <span className="text-[11px] font-bold uppercase tracking-widest text-slate-500">AI Catch Rate</span>
+            {/* Bottom Metrics Section */}
+            <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* AI Catch Rate Card */}
+                <div className="glass-card p-6 rounded-2xl border border-outline-variant/10 hover:border-primary/30 transition-all group relative overflow-hidden">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                            <span className="material-symbols-outlined text-xl">psychology</span>
                         </div>
-                        <h3 className="text-3xl font-black text-slate-900">{metrics.aiCatchRate}%</h3>
+                        <span className={`text-xs font-bold ${metrics.weeklyImprovement >= 0 ? 'text-emerald-400' : 'text-error'} flex items-center gap-1`}>
+                            <span className="material-symbols-outlined text-xs">
+                                {metrics.weeklyImprovement >= 0 ? 'trending_up' : 'trending_down'}
+                            </span> 
+                            {metrics.weeklyImprovement >= 0 ? '+' : ''}{metrics.weeklyImprovement}%
+                        </span>
                     </div>
-                    <p className="text-xs text-slate-500 font-medium">{metrics.weeklyImprovement >= 0 ? '+' : ''}{metrics.weeklyImprovement}% improvement this week</p>
+                    <p className="text-xs text-on-surface-variant uppercase tracking-widest font-bold mb-1">AI Catch Rate</p>
+                    <div className="flex items-baseline gap-2">
+                        <h3 className="text-3xl font-extrabold text-on-surface font-headline">{metrics.aiCatchRate}%</h3>
+                        <span className="text-[10px] text-on-surface-variant">of total revenue</span>
+                    </div>
+                    <div className="mt-4 h-1.5 w-full bg-outline-variant/20 rounded-full overflow-hidden">
+                        <div 
+                            className="h-full bg-primary rounded-full group-hover:shadow-[0_0_10px_rgba(208,188,255,0.5)] transition-all duration-1000" 
+                            style={{ width: `${metrics.aiCatchRate}%` }}
+                        ></div>
+                    </div>
                 </div>
-                <div className="bg-white p-6 rounded-[24px] shadow-[0px_4px_24px_rgba(44,47,49,0.04)] border border-slate-200/50 flex flex-col justify-between min-h-[160px] relative overflow-hidden">
-                    <div className="relative z-10">
-                        <div className="flex items-center gap-2 mb-2">
-                            <span className="material-symbols-outlined text-error text-lg">dangerous</span>
-                            <span className="text-[11px] font-bold uppercase tracking-widest text-slate-500">Prevented Losses</span>
+
+                {/* Prevented Losses Card */}
+                <div className="glass-card p-6 rounded-2xl border border-outline-variant/10 hover:border-primary/30 transition-all group relative overflow-hidden">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="w-10 h-10 rounded-xl bg-tertiary/10 text-tertiary flex items-center justify-center">
+                            <span className="material-symbols-outlined text-xl">account_balance_wallet</span>
                         </div>
-                        <h3 className="text-3xl font-black text-slate-900">₹{(metrics.preventedLoss || 0).toLocaleString()}</h3>
+                        <span className="text-xs font-bold text-emerald-400">Target Reached</span>
                     </div>
-                    <div className="absolute right-0 bottom-0 opacity-10">
-                        <span className="material-symbols-outlined text-9xl translate-x-1/4 translate-y-1/4">account_balance_wallet</span>
+                    <p className="text-xs text-on-surface-variant uppercase tracking-widest font-bold mb-1">Prevented Losses</p>
+                    <div className="flex items-baseline gap-2">
+                        <h3 className="text-3xl font-extrabold text-on-surface font-headline">₹{(metrics.preventedLoss || 0).toLocaleString()}</h3>
+                        <span className="text-[10px] text-on-surface-variant">this week</span>
                     </div>
-                    <p className="text-xs text-slate-500 font-medium mt-4">Across {metrics.flaggedAttempts} flagged high-risk attempts</p>
+                    <div className="mt-4 flex gap-1 items-end h-8">
+                        {[0.4, 0.7, 0.6, 0.9, 1, 0.6, 0.8].map((h, i) => (
+                            <div 
+                                key={i} 
+                                className="bg-primary/40 w-full rounded-t-sm transition-all duration-500 group-hover:bg-primary" 
+                                style={{ height: `${h * 100}%` }}
+                            ></div>
+                        ))}
+                    </div>
                 </div>
-                <div className={`p-6 rounded-[24px] shadow-lg text-white flex flex-col justify-between min-h-[160px] ${
-                    metrics.systemHealth === 'Critical' ? 'bg-gradient-to-br from-rose-500 to-rose-700 shadow-rose-500/20' :
-                    metrics.systemHealth === 'Moderate' ? 'bg-gradient-to-br from-amber-500 to-orange-600 shadow-amber-500/20' :
-                    'signature-gradient shadow-primary/20'
-                }`}>
-                    <div>
-                        <div className="flex items-center gap-2 mb-2">
-                            <span className="material-symbols-outlined text-white text-lg">rocket_launch</span>
-                            <span className="text-[11px] font-bold uppercase tracking-widest opacity-80">System Health</span>
+
+                {/* System Health Card */}
+                <div className="glass-card p-6 rounded-2xl border border-outline-variant/10 hover:border-primary/30 transition-all group relative overflow-hidden">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className={`w-10 h-10 rounded-xl ${metrics.systemHealth === 'Critical' ? 'bg-error/10 text-error' : 'bg-emerald-500/10 text-emerald-400'} flex items-center justify-center`}>
+                            <span className="material-symbols-outlined text-xl">hub</span>
                         </div>
-                        <h3 className="text-3xl font-black">{metrics.systemHealth}</h3>
+                        <div className="flex items-center gap-1">
+                            <span className={`w-1.5 h-1.5 ${metrics.systemHealth === 'Critical' ? 'bg-error' : 'bg-emerald-400'} rounded-full animate-pulse`}></span>
+                            <span className={`text-[10px] font-bold ${metrics.systemHealth === 'Critical' ? 'text-error' : 'text-emerald-400'}`}>
+                                {metrics.systemHealth.toUpperCase()}
+                            </span>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-2 mt-4">
-                        <div className="flex -space-x-2">
-                            {Array.from({ length: metrics.aiNodesActive }, (_, i) => (
-                                <div key={i} className="w-6 h-6 rounded-full border-2 border-white/30 bg-white/20"></div>
-                            ))}
+                    <p className="text-xs text-on-surface-variant uppercase tracking-widest font-bold mb-1">System Health</p>
+                    <div className="flex items-baseline gap-2">
+                        <h3 className="text-3xl font-extrabold text-on-surface font-headline">{metrics.systemHealth}</h3>
+                        <span className="text-[10px] text-on-surface-variant">Latency: 14ms</span>
+                    </div>
+                    <div className="mt-4 flex flex-wrap items-center gap-4 text-[10px] font-bold uppercase tracking-tighter">
+                        <div className="flex items-center gap-1.5">
+                            <span className="material-symbols-outlined text-sm text-emerald-400">check_circle</span>
+                            <span className="text-on-surface-variant">API: OK</span>
                         </div>
-                        <p className="text-xs font-medium">{metrics.aiNodesActive} AI Nodes active</p>
+                        <div className="flex items-center gap-1.5">
+                            <span className="material-symbols-outlined text-sm text-emerald-400">check_circle</span>
+                            <span className="text-on-surface-variant">Risk Engine: OK</span>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                            <span className="material-symbols-outlined text-sm text-emerald-400">{metrics.aiNodesActive > 0 ? 'check_circle' : 'error'}</span>
+                            <span className="text-on-surface-variant">{metrics.aiNodesActive} Nodes</span>
+                        </div>
                     </div>
                 </div>
             </div>
