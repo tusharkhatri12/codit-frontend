@@ -20,9 +20,7 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/login" replace />;
   }
   
-  if (!user.plan || user.plan === 'none') {
-    return <Navigate to="/onboarding" replace />;
-  }
+  return children;
 
   return children;
 };

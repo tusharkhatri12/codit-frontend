@@ -38,7 +38,7 @@ export default function Signup() {
                 console.log('✅ Signup successful, updating context and redirecting...');
                 setToken(data.token, data.user);
                 setUser(data.user);
-                navigate('/onboarding');
+                navigate('/dashboard');
             } else {
                 console.log('❌ Signup failed:', data.error);
                 setError(data.error || 'Signup failed');
