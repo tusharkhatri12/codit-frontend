@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { fetchAPI, setToken } from '../utils/api';
+import { fetchAPI, setToken, API_URL } from '../utils/api';
 import { useUser } from '../context/UserContext';
 
 export default function Login() {
@@ -192,7 +192,7 @@ export default function Login() {
                             </div>
 
                             <a 
-                                href={`${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/auth/google`}
+                                href={`${API_URL}/auth/google`}
                                 className="w-full py-4 px-6 rounded-2xl bg-[#1e2536] border border-[#464554]/20 text-[#dce1fb] font-bold text-sm flex items-center justify-center gap-4 hover:bg-[#252c3e] transition-all no-underline group"
                             >
                                 <svg className="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
