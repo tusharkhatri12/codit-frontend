@@ -11,7 +11,6 @@ import Orders from './pages/Orders';
 import RiskPatterns from './pages/RiskPatterns';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
-import Settings from './pages/Settings';
 import Onboarding from './pages/Onboarding';
 import VerifyOTP from './pages/VerifyOTP';
 import AuthSuccess from './pages/AuthSuccess';
