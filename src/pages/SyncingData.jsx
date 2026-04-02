@@ -32,10 +32,10 @@ export default function SyncingData() {
 
         const pollSyncStatus = async () => {
             try {
-                const { ok, data } = await fetchAPI(`/shops/sync-status?shop=${shop}`);
+                const { ok, data: responseBody } = await fetchAPI(`/shops/sync-status?shop=${shop}`);
 
-                if (ok && data) {
-                    const { syncProgress, ordersFound, customersLinked, syncStatus } = data;
+                if (ok && responseBody?.success) {
+                    const { syncProgress, ordersFound, customersLinked, syncStatus } = responseBody.data;
                     setProgress(syncProgress || 0);
                     setStats({ 
                         ordersFound: ordersFound || 0, 
